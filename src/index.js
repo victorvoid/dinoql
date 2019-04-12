@@ -2,41 +2,38 @@ const R = require('ramda')
 const resolvers = require('./resolvers')
 const parser = require('./parser')
 
+function getAllPropsFromQuery(context) {
+  const selections = R.path(['selectionSet', 'selections'], context);
+  return selections.reduce((acc, item) => {
+    return acc.concat(R.path(['name', 'value'], item))
+  }, [])
+}
+
+function useResolvers(context, keySelected, valueSelected, data) {
+  const params = R.prop('arguments', context)
+
+  return params.reduce((acc, param) => {
+    const argName = R.path(['name', 'value'], param)
+    const argValue = R.path(['value', 'value'], param)
+    const getResult = R.prop(argName, resolvers)
+    const result = getResult(valueSelected, argValue)
+
+    return R.assoc(keySelected, result, acc)
+  }, data)
+}
+
 function dinoql(data) {
   return (query) => {
     const parsed = parser(R.prop(0, query))
     const selections = R.path(['definitions', 0, 'selectionSet', 'selections', 0], parsed)
-
-    const arguments = R.prop('arguments', selections)
-    const objKey = R.path(['name', 'value'], selections)
-
-    const valueFromData = R.prop(objKey, data)
-
-    return arguments.reduce((acc, arg) => {
-      const name = R.path(['name', 'value'], arg)
-      const value = R.path(['value', 'value'], arg)
-      const fun = R.prop(name, resolvers)
-      const result = fun(valueFromData, value)
-
-      return R.assoc(objKey, result, acc)
-    }, data)
+    const keySelected = R.path(['name', 'value'], selections)
+    const valueSelected = R.prop(keySelected, data)
+    const newData = useResolvers(selections, keySelected, valueSelected, data);
+    const propsToGet = getAllPropsFromQuery(selections);
+    const valueFiltered = R.prop(keySelected, newData)
+    const dataFiltered = R.project(propsToGet, valueFiltered);
+    return dataFiltered
   }
 }
 
-const data = {
-  users: [
-    { name: 'Jorge', age: 3, active: true },
-    { name: 'Maria', age: 1, active: true }
-  ],
-
-  peoples: 2
-}
-
-const u = dinoql(data)`
-  users(orderBy: age) {
-    name,
-    age
-  }
-`
-
-console.log(u);
+module.exports = dinoql;
