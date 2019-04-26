@@ -3,7 +3,7 @@ const dinoql = require('../src');
 const data = {
   MyQuery: {
     users: [
-      { name: 'Jorge', age: 3, active: true, cards: [] },
+      { name: 'Jorge', age: 3, active: true, cards: [{ toggle: 'top', test: [{ abra: true }] }] },
       { name: 'Maria', age: 1, active: true, cards: [{ toggle: 'top', test: [{ abra: true }] }] }
     ],
 
@@ -13,10 +13,8 @@ const data = {
 
 const u = dinoql(data)`
   users(orderBy: age) {
-    name,
-    active,
     cards {
-      toggle
+      toggle,
     }
   },
   

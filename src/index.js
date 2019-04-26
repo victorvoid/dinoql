@@ -1,34 +1,41 @@
-const R = require('ramda')
-const resolvers = require('./resolvers')
-const parser = require('./parser')
+const R = require('ramda');
+const parser = require('./parser');
 
-function getData(ast, data) {
-  console.log('ast:', ast)
-  console.log('data:', data);
+function getData(ast, data = {}) {
+  // console.log('data:', data);
+  // console.log('ast:', ast);
+  // console.log('data', data);
   const nodeName = R.path(['name', 'value'], ast);
   const nodeValue = R.prop(nodeName, data);
-  console.log('name:', nodeName);
-  console.log('value:', nodeValue);
-
   const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
+
   let result = {};
+  const props = R.map(R.path(['name', 'value']), selections);
+
+  if(Array.isArray(data)) {
+    const result = data.reduce((acc, item) => {
+      if(typeof(item) === 'object') {
+        const obj = R.prop(nodeName, item);
+        return [...acc, R.project(props, obj)];
+      }
+
+      return acc;
+    }, [])
+
+    return result;
+  }
+
+  let filtered = data;
+  if(nodeValue) {
+     filtered =  R.ifElse(
+      Array.isArray,
+      R.project(props),
+      R.pick(props)
+    )(nodeValue)
+  }
+
   selections.forEach((sel) => {
-    const name = R.path(['name', 'value'], sel);
-    const value = R.prop(name, nodeValue);
-    let selectionChild = R.path(['selectionSet', 'selections'], sel);
-    if(selectionChild && Array.isArray(value)) {
-      const props = R.map(R.path(['name', 'value']), selectionChild);
-      // console.log('entrou', value)
-      const filtered = R.project(props, value);
-      // console.log('filtered', filtered)
-      result[name] = filtered;
-      // console.log('result:', result)
-      selectionChild.forEach((item, index) => {
-        filtered.forEach(filItem => {
-          getData(item, filItem)
-        })
-      })
-    }
+    getData(sel, filtered)
   })
 
   return result;
