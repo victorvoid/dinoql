@@ -2,37 +2,43 @@ const R = require('ramda')
 const resolvers = require('./resolvers')
 const parser = require('./parser')
 
-function getAllPropsFromQuery(context) {
-  const selections = R.path(['selectionSet', 'selections'], context);
-  return selections.reduce((acc, item) => {
-    return acc.concat(R.path(['name', 'value'], item))
-  }, [])
-}
+function getData(ast, data) {
+  console.log('ast:', ast)
+  console.log('data:', data);
+  const nodeName = R.path(['name', 'value'], ast);
+  const nodeValue = R.prop(nodeName, data);
+  console.log('name:', nodeName);
+  console.log('value:', nodeValue);
 
-function useResolvers(context, keySelected, valueSelected, data) {
-  const params = R.prop('arguments', context)
+  const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
+  let result = {};
+  selections.forEach((sel) => {
+    const name = R.path(['name', 'value'], sel);
+    const value = R.prop(name, nodeValue);
+    let selectionChild = R.path(['selectionSet', 'selections'], sel);
+    if(selectionChild && Array.isArray(value)) {
+      const props = R.map(R.path(['name', 'value']), selectionChild);
+      // console.log('entrou', value)
+      const filtered = R.project(props, value);
+      // console.log('filtered', filtered)
+      result[name] = filtered;
+      // console.log('result:', result)
+      selectionChild.forEach((item, index) => {
+        filtered.forEach(filItem => {
+          getData(item, filItem)
+        })
+      })
+    }
+  })
 
-  return params.reduce((acc, param) => {
-    const argName = R.path(['name', 'value'], param)
-    const argValue = R.path(['value', 'value'], param)
-    const getResult = R.prop(argName, resolvers)
-    const result = getResult(valueSelected, argValue)
-
-    return R.assoc(keySelected, result, acc)
-  }, data)
+  return result;
 }
 
 function dinoql(data) {
   return (query) => {
-    const parsed = parser(R.prop(0, query))
-    const selections = R.path(['definitions', 0, 'selectionSet', 'selections', 0], parsed)
-    const keySelected = R.path(['name', 'value'], selections)
-    const valueSelected = R.prop(keySelected, data)
-    const newData = useResolvers(selections, keySelected, valueSelected, data);
-    const propsToGet = getAllPropsFromQuery(selections);
-    const valueFiltered = R.prop(keySelected, newData)
-    const dataFiltered = R.project(propsToGet, valueFiltered);
-    return dataFiltered
+    const ast = parser(R.prop(0, query));
+    const body = R.path(['definitions', 0], ast);
+    getData(body, data)
   }
 }
 
