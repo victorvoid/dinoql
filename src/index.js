@@ -7,33 +7,27 @@ function getData(ast, data = {}) {
   const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
   const props = R.map(R.path(['name', 'value']), selections);
   if(Array.isArray(data)) {
-    const result = data.reduce((acc, item) => {
+     return data.reduce((acc, item) => {
       if(typeof(item) === 'object') {
-        const obj = R.prop(nodeName, item);
-        const value = R.project(props, obj);
-        return [...acc, ...value];
+        const obj = R.propOr([], nodeName, item);
+        const value = {[nodeName]: R.project(props, obj)};
+        return [...acc, value];
       }
 
       return acc;
     }, []);
-
-    return result;
   }
 
-  let selected = data;
-  if(nodeValue) {
-     selected =  R.ifElse(
+  const getFiltered = R.ifElse(
       Array.isArray,
       R.project(props),
       R.pick(props)
-    )(nodeValue)
-  }
+  );
 
-  const filtered = selections.reduce((acc, sel) => {
-    return R.assoc(nodeName, getData(sel, selected), acc)
-  }, data)
+  const filtered = getFiltered(nodeValue);
 
-  return filtered;
+  return selections.reduce((acc, sel) =>
+      R.assoc(nodeName, getData(sel, filtered), acc), data);
 }
 
 function dinoql(data) {
