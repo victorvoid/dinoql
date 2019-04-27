@@ -2,50 +2,47 @@ const R = require('ramda');
 const parser = require('./parser');
 
 function getData(ast, data = {}) {
-  // console.log('data:', data);
-  // console.log('ast:', ast);
-  // console.log('data', data);
   const nodeName = R.path(['name', 'value'], ast);
   const nodeValue = R.prop(nodeName, data);
   const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
-
-  let result = {};
   const props = R.map(R.path(['name', 'value']), selections);
-
   if(Array.isArray(data)) {
     const result = data.reduce((acc, item) => {
       if(typeof(item) === 'object') {
         const obj = R.prop(nodeName, item);
-        return [...acc, R.project(props, obj)];
+        const value = R.project(props, obj);
+        return [...acc, ...value];
       }
 
       return acc;
-    }, [])
+    }, []);
 
     return result;
   }
 
-  let filtered = data;
+  let selected = data;
   if(nodeValue) {
-     filtered =  R.ifElse(
+     selected =  R.ifElse(
       Array.isArray,
       R.project(props),
       R.pick(props)
     )(nodeValue)
   }
 
-  selections.forEach((sel) => {
-    getData(sel, filtered)
-  })
+  const filtered = selections.reduce((acc, sel) => {
+    return R.assoc(nodeName, getData(sel, selected), acc)
+  }, data)
 
-  return result;
+  return filtered;
 }
 
 function dinoql(data) {
+  const newData = { MyQuery: data };
   return (query) => {
     const ast = parser(R.prop(0, query));
     const body = R.path(['definitions', 0], ast);
-    getData(body, data)
+    const result = getData(body, newData);
+    return result.MyQuery;
   }
 }
 
