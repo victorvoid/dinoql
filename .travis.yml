@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "stable"
+install: true
+env:
+  global:
+    - USE_YARN=yes
+script:
+  - yarn install
+  - yarn run test
+after_success: 'npm run coveralls'
+cache:
+  directories:
+    - node_modules
