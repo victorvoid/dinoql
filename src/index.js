@@ -2,7 +2,6 @@ const R = require('ramda');
 const parser = require('./parser');
 
 function getData(ast, data = {}, options) {
-  const get = R.prop('get', options);
   const nodeName = R.path(['name', 'value'], ast);
   const nodeValue = R.prop(nodeName, data);
   const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
@@ -12,7 +11,13 @@ function getData(ast, data = {}, options) {
      return data.reduce((acc, item) => {
       if(typeof(item) === 'object') {
         const obj = R.propOr([], nodeName, item);
-        const value = {[nodeName]: R.project(props, obj)};
+        const getFiltered = R.ifElse(
+          Array.isArray,
+          R.project(props),
+          R.identity
+        );
+        const value = { [nodeName]: getFiltered(obj) };
+
         return [...acc, value];
       }
 
@@ -29,8 +34,8 @@ function getData(ast, data = {}, options) {
   const filtered = getFiltered(nodeValue || []);
 
   return selections.reduce((acc, sel) => {
-    const value = getData(sel, filtered);
-    return get ? value : R.assoc(nodeName, value, acc)
+    const value = getData(sel, filtered, options);
+    return options.get ? value : R.assoc(nodeName, value, acc)
   }, data)
 }
 

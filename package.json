@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
     "graphql": "^14.2.1",
     "meow": "^5.0.0",
     "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1"
   }
 }
