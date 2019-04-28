@@ -1,25 +1,38 @@
-const dinoql = require('../src');
+const { dql, dqlGet } = require('../src');
 
 const data = {
-    users: [
-      { name: 'Jorge', age: 3, active: true, cards: [{ toggle: 'top', test: [{ abra: {name: 'Jorge', idade: 10}, mat: true }] }] },
-      { name: 'Maria', age: 1, active: true, cards: [{ toggle: 'top', test: [{ abra: true , mat: true}] }] }
-    ],
+    users: {
+        test: {
+            jorge: {
+                nome: {
+                    caixa: 10,
+                    box: true
+                },
+                idade: 10
+            },
+            mateus: {
+                nome: 'mateus',
+                idade: 10
+            }
+        }
+    },
 
     peoples: 2
 }
 
-const u = dinoql(data)`
+const u = dqlGet(data)`
   users(orderBy: age) {
-    cards {
-      toggle,
-      test {
-        abra {
-          name
+    test {
+        jorge {
+            nome {
+                box
+            }
         }
-      }
     }
   }
 `
 
-console.log(u);
+// const res = u.users[0].cards[0];
+const res = u;
+
+console.log('from example: ', res)
