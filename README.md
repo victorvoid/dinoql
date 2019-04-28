@@ -17,7 +17,7 @@ $ npm install dinoql -S
 You can keep the structure of the object.
 
 ```javascript
-const { ql } from 'dinoql'
+const { ql } = require('dinoql')
 
 const data = {
   api: {
@@ -74,7 +74,7 @@ const value = ql(data)`
 You can only get the value.
 
 ```javascript
-const { qlGet } from 'dinoql'
+const { qlGet } = require('dinoql')
 
 const data = {
   api: {
@@ -119,7 +119,7 @@ const value = qlGet(data)`
 
 
 ```javascript
-const { ql } from 'dinoql'
+const { ql } = require('dinoql')
 
 const data = {
   api: {
