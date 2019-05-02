@@ -118,7 +118,8 @@ describe('[dql]', () => {
           test3 { 
             test4 { 
                box(age: 10) {
-                  name
+                  name,
+                  age
                }
             } 
           }
@@ -131,7 +132,7 @@ describe('[dql]', () => {
           test3: {
             test4: {
               box: [
-                { name: { full: true } }
+                { name: { full: true }, age: 10 },
               ]
             }
           }

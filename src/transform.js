@@ -23,7 +23,7 @@ const getItemsResolved = ({ nodeName, props, data }) => {
         R.identity
       );
 
-      const value = { [nodeName]: getFiltered(obj) };
+      const value = { ...item, [nodeName]: getFiltered(obj) };
 
       return [...acc, value];
     }
