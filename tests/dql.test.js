@@ -34,7 +34,7 @@ describe('[dql]', () => {
         }
       }`;
 
-    expect(value).toEqual({ test: { test2: {test3: {test4: { test5: 10 }}}}});
+    expect(value).toEqual({ test: { test2: {test3: {test4: { test5: 10  }}}}});
   });
 
   test('should works in arrays', () => {
@@ -109,6 +109,37 @@ describe('[dql]', () => {
     };
 
     expect(value).toEqual(dataOrdered);
+  });
+
+  test('should filter by key from array', () => {
+    const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               box(age: 10) {
+                  name
+               }
+            } 
+          }
+        }
+      }`;
+
+    const dataFiltered = {
+      test: {
+        test2: {
+          test3: {
+            test4: {
+              box: [
+                { name: { full: true } }
+              ]
+            }
+          }
+        }
+      }
+    };
+
+    expect(value).toEqual(dataFiltered);
   });
 });
 

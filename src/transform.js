@@ -6,7 +6,7 @@ const getResolved = (data, nodeName) => args => {
   const result = args.reduce((acc, arg) => {
     const name = R.path(['name', 'value'], arg);
     const value = R.path(['value', 'value'], arg);
-    const resolver = R.prop(name, resolvers);
+    const resolver = R.propOr(resolvers.filterKey(name), name, resolvers);
     return resolver(arr, value);
   }, arr);
 
@@ -41,15 +41,16 @@ const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props, o
 
   const filtered = getFiltered(nodeValue || []);
 
-  return selections.reduce((acc, sel) => {
+  const result = selections.reduce((acc, sel) => {
     const value = getQueryResolved(sel, filtered, options);
     return options.get ? value : R.assoc(nodeName, value, acc)
   }, data);
+
+  return result;
 };
 
 function getQueryResolved(ast, data = {}, options) {
   const nodeName = R.path(['name', 'value'], ast);
-  const nodeValue = R.prop(nodeName, data);
   const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
   const props = R.map(R.path(['name', 'value']), selections);
   const astArgs = R.propOr([], 'arguments', ast);
@@ -59,8 +60,10 @@ function getQueryResolved(ast, data = {}, options) {
     getResolved(data, nodeName)
   )(astArgs);
 
+  const nodeValue = R.prop(nodeName, dataResolved);
+
   if(Array.isArray(data)) {
-    return getItemsResolved({ nodeName, props, data })
+    return getItemsResolved({ nodeName, props, data: dataResolved })
   }
 
   return getChildreansResolved({
