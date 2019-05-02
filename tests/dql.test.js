@@ -142,5 +142,71 @@ describe('[dql]', () => {
 
     expect(value).toEqual(dataFiltered);
   });
+
+  test('should get first item from array', () => {
+    const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               box(first: 1) {
+                  name,
+                  age
+               }
+            } 
+          }
+        }
+      }`;
+
+    const dataFiltered = {
+      test: {
+        test2: {
+          test3: {
+            test4: {
+              box: {
+                name: { full: true },
+                age: 10
+              }
+            }
+          }
+        }
+      }
+    };
+
+    expect(value).toEqual(dataFiltered);
+  });
+
+  test('should get last item from array', () => {
+    const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               box(last: 1) {
+                  name,
+                  age
+               }
+            } 
+          }
+        }
+      }`;
+
+    const dataFiltered = {
+      test: {
+        test2: {
+          test3: {
+            test4: {
+              box: {
+                name: { full: false },
+                age: 2
+              }
+            }
+          }
+        }
+      }
+    };
+
+    expect(value).toEqual(dataFiltered);
+  });
 });
 
