@@ -16,5 +16,6 @@ module.exports = {
   filterKey,
   orderBy,
   first,
-  last
+  last,
+  gt
 }

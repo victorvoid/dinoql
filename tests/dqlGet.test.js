@@ -20,7 +20,6 @@ describe('[dqlGet]', () => {
   });
 
   test('should return only values', () => {
-
     const value = dqlGet(data)` 
       test { 
         test2 { 
