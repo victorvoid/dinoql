@@ -1,4 +1,4 @@
-const { dql } = require('../src');
+const dql = require('../src');
 
 describe('[dql] resolvers', () => {
   let data = {};
@@ -24,7 +24,7 @@ describe('[dql] resolvers', () => {
 
   describe('[orderBy]', () => {
     test('should order by specific prop', () => {
-      const value = dql(data)` 
+      const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
@@ -58,7 +58,7 @@ describe('[dql] resolvers', () => {
 
   describe('[first]', () => {
     test('should get first item from array', () => {
-      const value = dql(data)` 
+      const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
@@ -93,7 +93,7 @@ describe('[dql] resolvers', () => {
 
   describe('[last]', () => {
     test('should get last item from array', () => {
-      const value = dql(data)` 
+      const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 

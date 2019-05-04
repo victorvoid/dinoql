@@ -1,6 +1,6 @@
-const { dqlGet } = require('../src');
+const dql = require('../src');
 
-describe('[dqlGet]', () => {
+describe('[dql] { keep: false }', () => {
   let data = {};
   beforeEach(() => {
     data = {
@@ -20,7 +20,7 @@ describe('[dqlGet]', () => {
   });
 
   test('should return only values', () => {
-    const value = dqlGet(data)` 
+    const value = dql(data)` 
       test { 
         test2 { 
           test3 { 
@@ -43,7 +43,7 @@ describe('[dqlGet]', () => {
   });
 
   test('should return only values using aliases', () => {
-    const value = dqlGet(data)` 
+    const value = dql(data)` 
       test { 
         test2 { 
           test3 { 
@@ -66,7 +66,7 @@ describe('[dqlGet]', () => {
   });
 
   test('should return only values using defaultValue', () => {
-    const value = dqlGet(data)` 
+    const value = dql(data)` 
       test { 
         test2 { 
           test3 { 
@@ -90,7 +90,7 @@ describe('[dqlGet]', () => {
 
 
   test('should return empty object to keys not found', () => {
-    const value = dqlGet(data)` 
+    const value = dql(data)` 
       test { 
         testdsjj { 
           testsdjsjk { 

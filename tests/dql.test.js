@@ -1,4 +1,4 @@
-const { dql } = require('../src');
+const dql = require('../src');
 
 describe('[dql]', () => {
   let data = {};
@@ -23,7 +23,7 @@ describe('[dql]', () => {
   });
 
   test('should return full object structure', () => {
-    const value = dql(data)` 
+    const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
@@ -38,7 +38,7 @@ describe('[dql]', () => {
   });
 
   test('should works in arrays', () => {
-    const value = dql(data)` 
+    const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
@@ -71,7 +71,7 @@ describe('[dql]', () => {
 
 
   test('should return key if is not found', () => {
-    const value = dql(data)` 
+    const value = dql(data, { keep: true })` 
       test { 
         testdsjj
       }`;
@@ -81,7 +81,7 @@ describe('[dql]', () => {
 
 
   test('should filter by key from array', () => {
-    const value = dql(data)` 
+    const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
@@ -113,7 +113,7 @@ describe('[dql]', () => {
   });
 
   test('should rename keys using aliases', () => {
-    const value = dql(data)` 
+    const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
@@ -140,7 +140,7 @@ describe('[dql]', () => {
   });
 
   test('should rename keys using aliases and getting keys', () => {
-    const value = dql(data)` 
+    const value = dql(data, { keep: true })` 
       test { 
         test2 { 
           test3 { 
