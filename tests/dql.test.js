@@ -1,6 +1,6 @@
 const dql = require('../src');
 
-describe('[dql]', () => {
+describe('[dql] { keep: false }', () => {
   let data = {};
   beforeEach(() => {
     data = {
@@ -9,10 +9,7 @@ describe('[dql]', () => {
           test3: {
             test4: {
               test5: 10,
-              box: [
-                { name: { full: true }, age: 10 },
-                { name: { full: false }, age: 2 }
-              ]
+              box: true
             },
             age: 10
           }
@@ -22,153 +19,89 @@ describe('[dql]', () => {
     };
   });
 
-  test('should return full object structure', () => {
-    const value = dql(data, { keep: true })` 
+  test('should return only values', () => {
+    const value = dql(data)` 
       test { 
         test2 { 
           test3 { 
             test4 { 
-               test5
-            } 
-          }
-        }
-      }`;
-
-    expect(value).toEqual({ test: { test2: {test3: {test4: { test5: 10  }}}}});
-  });
-
-  test('should works in arrays', () => {
-    const value = dql(data, { keep: true })` 
-      test { 
-        test2 { 
-          test3 { 
-            test4 { 
-              box {
-                name
-              }
-            } 
-          }
-        }
-      }`;
-
-    const dataExpected = {
-      test: {
-        test2: {
-          test3: {
-            test4: {
-              box: [
-                { name: { full: true } },
-                { name: { full: false } }
-              ]
-            }
-          }
-        }
-      }
-    };
-
-    expect(value).toEqual(dataExpected);
-  });
-
-
-  test('should return key if is not found', () => {
-    const value = dql(data, { keep: true })` 
-      test { 
-        testdsjj
-      }`;
-
-    expect(value).toEqual({ test: {} });
-  });
-
-
-  test('should filter by key from array', () => {
-    const value = dql(data, { keep: true })` 
-      test { 
-        test2 { 
-          test3 { 
-            test4 { 
-               box(age: 10) {
-                  name,
-                  age
-               }
-            } 
-          }
+               test5,
+               box
+            },
+            age
+          },
         }
       }`;
 
     const dataFiltered = {
-      test: {
-        test2: {
-          test3: {
-            test4: {
-              box: [
-                { name: { full: true }, age: 10 },
-              ]
-            }
-          }
-        }
-      }
+      test5: 10,
+      box: true,
+      age: 10
     };
 
-    expect(value).toEqual(dataFiltered);
+    expect(value).toEqual(dataFiltered)
   });
 
-  test('should rename keys using aliases', () => {
-    const value = dql(data, { keep: true })` 
+  test('should return only values using aliases', () => {
+    const value = dql(data)` 
       test { 
         test2 { 
           test3 { 
             test4 { 
-              test5Changed: test5
+               test5,
+               box
+            },
+            ageChanged: age
+          },
+        }
+      }`;
+
+    const dataFiltered = {
+      test5: 10,
+      box: true,
+      ageChanged: 10
+    };
+
+    expect(value).toEqual(dataFiltered)
+  });
+
+  test('should return only values using defaultValue', () => {
+    const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               test5,
+               box
+            },
+            notfound(defaultValue: 10)
+          },
+        }
+      }`;
+
+    const dataFiltered = {
+      test5: 10,
+      box: true,
+      notfound: 10
+    };
+
+    expect(value).toEqual(dataFiltered)
+  });
+
+
+  test('should return empty object to keys not found', () => {
+    const value = dql(data)` 
+      test { 
+        testdsjj { 
+          testsdjsjk { 
+            test4skdjsdsj { 
+               test5sldksldks
             } 
           }
         }
       }`;
 
-    const dataFiltered = {
-      test: {
-        test2: {
-          test3: {
-            test4: {
-              test5Changed: 10
-            }
-          }
-        }
-      }
-    };
-
-    expect(value).toEqual(dataFiltered);
-  });
-
-  test('should rename keys using aliases and getting keys', () => {
-    const value = dql(data, { keep: true })` 
-      test { 
-        test2 { 
-          test3 { 
-            test4 { 
-               newBox: box(age: 10) {
-                  name,
-                  age
-               }
-            } 
-          }
-        }
-      }`;
-
-    const dataFiltered = {
-      test: {
-        test2: {
-          test3: {
-            test4: {
-              newBox: [
-                { name: { full: true }, age: 10 },
-              ]
-            }
-          }
-        }
-      }
-    };
-
-    expect(value).toEqual(dataFiltered);
-  });
+    expect(value).toEqual({})
+  })
 });
 

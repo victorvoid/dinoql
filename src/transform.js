@@ -51,11 +51,13 @@ function Transform(options) {
         return  R.assoc(nodeName, value, acc)
       }
 
+      const oldName = R.path(['name', 'value'], sel);
+      const aliasName = R.path(['alias', 'value'], sel);
+      const name = aliasName || oldName;
       if(!sel.selectionSet) {
-        const oldName = R.path(['name', 'value'], sel);
-        const aliasName = R.path(['alias', 'value'], sel);
-        const name = aliasName || oldName;
         _objToGet[name] = R.prop(name, value);
+      } else if(sel.arguments.length && sel.selectionSet) {
+        _objToGet[name] = R.prop(name, filtered);
       }
 
       return _objToGet
