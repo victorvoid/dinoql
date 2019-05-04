@@ -118,6 +118,33 @@ describe('[dql]', () => {
         test2 { 
           test3 { 
             test4 { 
+              test5Changed: test5
+            } 
+          }
+        }
+      }`;
+
+    const dataFiltered = {
+      test: {
+        test2: {
+          test3: {
+            test4: {
+              test5Changed: 10
+            }
+          }
+        }
+      }
+    };
+
+    expect(value).toEqual(dataFiltered);
+  });
+
+  test('should rename keys using aliases and getting keys', () => {
+    const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
                newBox: box(age: 10) {
                   name,
                   age

@@ -1,6 +1,7 @@
 const resolvers = require('./resolvers');
 const R = require('ramda');
 const { renameProp } = require('./utils');
+let _objToGet = {}
 
 const getResolved = ({ data, nodeName }) => args => {
   const arr = R.prop(nodeName, data);
@@ -44,7 +45,18 @@ const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props, o
 
   const result = selections.reduce((acc, sel) => {
     const value = getQueryResolved(sel, filtered, options);
-    return options.get ? value : R.assoc(nodeName, value, acc)
+    if(options.get) {
+      if(!sel.selectionSet) {
+        const oldName = R.path(['name', 'value'], sel);
+        const aliasName = R.path(['alias', 'value'], sel);
+        const name = aliasName || oldName;
+        _objToGet[name] = R.prop(name, value);
+      }
+
+      return _objToGet
+    }
+
+    return  R.assoc(nodeName, value, acc)
   }, data);
 
   return result;

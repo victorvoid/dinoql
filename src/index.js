@@ -11,7 +11,7 @@ function dinoql(data, options = {}) {
     const result = transform.getQueryResolved(body, newData, options);
 
     if(options.get) {
-      return R.compose(R.prop(0), R.values)(result);
+      return result;
     }
 
     return result.MyQuery;

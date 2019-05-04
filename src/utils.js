@@ -8,3 +8,4 @@ const renameProp = (oldProp, newProp, { [oldProp]: old, ...others }) => ({
 module.exports = {
   renameProp
 };
+

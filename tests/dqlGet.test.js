@@ -25,17 +25,71 @@ describe('[dqlGet]', () => {
         test2 { 
           test3 { 
             test4 { 
-               test5
-            } 
-          }
+               test5,
+               box
+            },
+            age
+          },
         }
-      }`
+      }`;
 
-    expect(value).toBe(10)
+    const dataFiltered = {
+      test5: 10,
+      box: true,
+      age: 10
+    };
+
+    expect(value).toEqual(dataFiltered)
+  });
+
+  test('should return only values using aliases', () => {
+    const value = dqlGet(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               test5,
+               box
+            },
+            ageChanged: age
+          },
+        }
+      }`;
+
+    const dataFiltered = {
+      test5: 10,
+      box: true,
+      ageChanged: 10
+    };
+
+    expect(value).toEqual(dataFiltered)
+  });
+
+  test('should return only values using defaultValue', () => {
+    const value = dqlGet(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               test5,
+               box
+            },
+            notfound(defaultValue: 10)
+          },
+        }
+      }`;
+
+    const dataFiltered = {
+      test5: 10,
+      box: true,
+      notfound: 10
+    };
+
+    expect(value).toEqual(dataFiltered)
   });
 
 
-  test('should return undefined to keys not found', () => {
+  test('should return empty object to keys not found', () => {
     const value = dqlGet(data)` 
       test { 
         testdsjj { 
@@ -47,7 +101,7 @@ describe('[dqlGet]', () => {
         }
       }`
 
-    expect(value).toBeUndefined()
+    expect(value).toEqual({})
   })
 });
 
