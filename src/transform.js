@@ -76,13 +76,13 @@ function Transform(options) {
       }
 
       const name = _.ast.getAlias(sel) || _.ast.getName(sel);
-      if(!sel.selectionSet) {
+      if(Array.isArray(value)) {
+        _objToGet[nodeName] = value
+      } else if(!sel.selectionSet) {
         _objToGet[name] = _.prop(name, value);
-      } else if(sel.arguments.length && sel.selectionSet) {
-        _objToGet[name] = _.prop(name, filtered);
       }
 
-      return _objToGet
+      return _objToGet;
     }, data);
 
     return result;
