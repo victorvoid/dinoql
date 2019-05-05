@@ -1,14 +1,13 @@
 const resolvers = require('./resolvers');
 const _ = require('./utils');
-const { renameProp } = require('./utils');
 
 function Transform(options) {
   let _objToGet = {};
   const getResolved = ({ data, nodeName }) => args => {
     const arr = _.prop(nodeName, data);
     const result = args.reduce((acc, arg) => {
-      const name = _.path(['name', 'value'], arg);
-      const value = _.path(['value', 'value'], arg);
+      const name = _.ast.getName(arg);
+      const value = _.ast.getValue(arg);
       const resolver = _.propOr(resolvers.filterKey(name), name, resolvers);
       return resolver(arr, value);
     }, arr);
@@ -26,7 +25,7 @@ function Transform(options) {
           _.identity
         );
 
-        const value = { ...item, [nodeName]: getFiltered(obj) };
+        const value = _.assoc(nodeName, getFiltered(obj), item);
 
         return [...acc, value];
       }
@@ -51,8 +50,8 @@ function Transform(options) {
         return  _.assoc(nodeName, value, acc)
       }
 
-      const oldName = _.path(['name', 'value'], sel);
-      const aliasName = _.path(['alias', 'value'], sel);
+      const oldName = _.ast.getName(sel);
+      const aliasName = _.ast.getAlias(sel);
       const name = aliasName || oldName;
       if(!sel.selectionSet) {
         _objToGet[name] = _.prop(name, value);
@@ -67,12 +66,12 @@ function Transform(options) {
   };
 
   function getQueryResolved(ast, data = {}) {
-    const nodeAlias = _.path(['alias', 'value'], ast);
-    const oldNodeName = _.path(['name', 'value'], ast);
-    const nodeName = nodeAlias ? nodeAlias : oldNodeName;
-    const dataWithAlias = nodeAlias ? renameProp(oldNodeName, nodeAlias, data) : data;
+    const nodeAlias = _.ast.getAlias(ast);
+    const oldNodeName = _.ast.getName(ast);
+    const nodeName = nodeAlias || oldNodeName;
+    const dataWithAlias = nodeAlias ? _.renameProp(oldNodeName, nodeAlias, data) : data;
     const selections = _.pathOr([], ['selectionSet', 'selections'], ast);
-    const props = _.map(_.path(['name', 'value']), selections);
+    const props = _.map(_.ast.getName, selections);
     const astArgs = _.propOr([], 'arguments', ast);
     const dataResolved = _.ifElse(
       _.isEmpty,

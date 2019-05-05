@@ -3,7 +3,7 @@ const renameProp = (oldProp, newProp, { [oldProp]: old, ...others }) => ({
   ...others,
 });
 
-module.exports = {
+const R = {
   prop: require('ramda/src/prop'),
   propOr: require('ramda/src/propOr'),
   path: require('ramda/src/path'),
@@ -17,6 +17,17 @@ module.exports = {
   always: require('ramda/src/always'),
   isEmpty: require('ramda/src/isEmpty'),
   assoc: require('ramda/src/assoc'),
-  identity: require('ramda/src/identity'),
+  identity: require('ramda/src/identity')
+};
+
+const ast = {
+  getValue: R.path(['value', 'value']),
+  getAlias: R.path(['alias', 'value']),
+  getName: R.path(['name', 'value'])
+}
+
+module.exports = {
+  ...R,
+  ast,
   renameProp
 };
