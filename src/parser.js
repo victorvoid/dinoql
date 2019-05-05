@@ -1,15 +1,13 @@
-const { parse } = require('graphql')
+const { parse } = require('graphql/language/parser');
 
 function parser(code) {
   const ql = ` 
     query MyQuery {
       ${code}
     }
-  `
+  `;
 
-  const parsed = parse(ql)
-
-  return parsed;
+  return parse(ql);
 }
 
 module.exports = parser;
