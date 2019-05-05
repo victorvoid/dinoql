@@ -67,7 +67,7 @@ const data = {
 }
 ```
 
-### Getting only name from users**
+### Getting only name from users
 
 ```js
 import dinoql from 'dinoql'
@@ -177,7 +177,7 @@ import dinoql from 'dinoql'
 
 const users = dinoql(data)`
   requests {
-    users(first: 1) {
+    users(first: true) {
       name
     }
   }
@@ -193,7 +193,7 @@ import dinoql from 'dinoql'
 
 const users = dinoql(data)`
   requests {
-    users(last: 1) {
+    users(last: true) {
       name
     }
   }
