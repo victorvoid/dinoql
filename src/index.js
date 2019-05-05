@@ -2,6 +2,7 @@ const _ = require('./utils');
 const parser = require('./parser');
 const transform = require('./transform');
 
+let memo = {};
 /**
  * @param {object} data - The data to filter
  * @param {object} options - The custom options
@@ -10,6 +11,11 @@ const transform = require('./transform');
 function dinoql(data, options = { keep: false }) {
   const newData = { MyQuery: data };
   return (query) => {
+    const dataIndex = JSON.stringify({ data, query });
+    if(dataIndex in memo) {
+      return memo[dataIndex];
+    }
+
     const ast = parser(_.prop(0, query));
     const body = _.path(['definitions', 0], ast);
     const { getQueryResolved } = transform(options);
@@ -20,6 +26,7 @@ function dinoql(data, options = { keep: false }) {
       return result.MyQuery;
     }
 
+    memo[dataIndex] = result;
     return result;
   }
 }
