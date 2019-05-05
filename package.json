@@ -1,10 +1,12 @@
 {
   "name": "dinoql",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "A query language for JavaScript Objects using GraphQL syntax.",
-  "main": "src/index.js",
+  "main": "dist/dinoql.min.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,11 @@
     "ramda": "^0.26.1"
   },
   "devDependencies": {
-    "jest": "^24.7.1"
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-loader": "^8.0.5",
+    "jest": "^24.7.1",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.2"
   }
 }
