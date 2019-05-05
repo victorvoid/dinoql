@@ -47,12 +47,10 @@ function Transform(options) {
       const value = getQueryResolved(sel, filtered);
 
       if(options.keep) {
-        return  _.assoc(nodeName, value, acc)
+        return _.assoc(nodeName, value, acc)
       }
 
-      const oldName = _.ast.getName(sel);
-      const aliasName = _.ast.getAlias(sel);
-      const name = aliasName || oldName;
+      const name = _.ast.getAlias(sel) || _.ast.getName(sel);
       if(!sel.selectionSet) {
         _objToGet[name] = _.prop(name, value);
       } else if(sel.arguments.length && sel.selectionSet) {

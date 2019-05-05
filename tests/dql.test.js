@@ -103,5 +103,16 @@ describe('[dql] { keep: false }', () => {
 
     expect(value).toEqual({})
   })
+
+  test('should get error when resolver does not exist', () => {
+    try {
+      const value = dql(data)` 
+      test { 
+        test1(defaultValue: 10, rskkskksks: 10)
+      }`;
+    } catch(e){
+      expect(e.message).toBe('Resolver "rskkskksks" does not exist.');
+    }
+  })
 });
 

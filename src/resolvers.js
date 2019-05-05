@@ -5,6 +5,10 @@ function orderBy(value = [], prop) {
 };
 
 const filterKey = (argName) => (data, value) => {
+  if(!data) {
+    throw new Error(`Resolver "${argName}" does not exist.`)
+  }
+
   return data.filter(item => _.prop(argName, item) == value);
 };
 
