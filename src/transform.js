@@ -109,7 +109,7 @@ function Transform(options) {
 
     const nodeValue = _.prop(nodeName, dataResolved);
 
-    if(Array.isArray(data)) {
+    if(Array.isArray(dataResolved)) {
       return getItemsResolved({ nodeName, props, data: dataResolved })
     }
 
