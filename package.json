@@ -31,7 +31,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "babel-loader": "^8.0.5",
-    "babel-plugin-ramda": "^2.0.0",
     "jest": "^24.7.1",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.2"

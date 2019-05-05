@@ -1,29 +1,29 @@
 const resolvers = require('./resolvers');
-const R = require('ramda');
+const _ = require('./utils');
 const { renameProp } = require('./utils');
 
 function Transform(options) {
   let _objToGet = {};
   const getResolved = ({ data, nodeName }) => args => {
-    const arr = R.prop(nodeName, data);
+    const arr = _.prop(nodeName, data);
     const result = args.reduce((acc, arg) => {
-      const name = R.path(['name', 'value'], arg);
-      const value = R.path(['value', 'value'], arg);
-      const resolver = R.propOr(resolvers.filterKey(name), name, resolvers);
+      const name = _.path(['name', 'value'], arg);
+      const value = _.path(['value', 'value'], arg);
+      const resolver = _.propOr(resolvers.filterKey(name), name, resolvers);
       return resolver(arr, value);
     }, arr);
 
-    return R.assoc(nodeName, result, data)
+    return _.assoc(nodeName, result, data)
   };
 
   const getItemsResolved = ({ nodeName, props, data }) => {
     return data.reduce((acc, item) => {
       if(typeof(item) === 'object') {
-        const obj = R.propOr([], nodeName, item);
-        const getFiltered = R.ifElse(
+        const obj = _.propOr([], nodeName, item);
+        const getFiltered = _.ifElse(
           Array.isArray,
-          R.project(props),
-          R.identity
+          _.project(props),
+          _.identity
         );
 
         const value = { ...item, [nodeName]: getFiltered(obj) };
@@ -36,10 +36,10 @@ function Transform(options) {
   };
 
   const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props }) => {
-    const getFiltered = R.ifElse(
+    const getFiltered = _.ifElse(
       Array.isArray,
-      R.project(props),
-      R.pick(props)
+      _.project(props),
+      _.pick(props)
     );
 
     const filtered = getFiltered(nodeValue || []);
@@ -48,16 +48,16 @@ function Transform(options) {
       const value = getQueryResolved(sel, filtered);
 
       if(options.keep) {
-        return  R.assoc(nodeName, value, acc)
+        return  _.assoc(nodeName, value, acc)
       }
 
-      const oldName = R.path(['name', 'value'], sel);
-      const aliasName = R.path(['alias', 'value'], sel);
+      const oldName = _.path(['name', 'value'], sel);
+      const aliasName = _.path(['alias', 'value'], sel);
       const name = aliasName || oldName;
       if(!sel.selectionSet) {
-        _objToGet[name] = R.prop(name, value);
+        _objToGet[name] = _.prop(name, value);
       } else if(sel.arguments.length && sel.selectionSet) {
-        _objToGet[name] = R.prop(name, filtered);
+        _objToGet[name] = _.prop(name, filtered);
       }
 
       return _objToGet
@@ -67,20 +67,20 @@ function Transform(options) {
   };
 
   function getQueryResolved(ast, data = {}) {
-    const nodeAlias = R.path(['alias', 'value'], ast);
-    const oldNodeName = R.path(['name', 'value'], ast);
+    const nodeAlias = _.path(['alias', 'value'], ast);
+    const oldNodeName = _.path(['name', 'value'], ast);
     const nodeName = nodeAlias ? nodeAlias : oldNodeName;
     const dataWithAlias = nodeAlias ? renameProp(oldNodeName, nodeAlias, data) : data;
-    const selections = R.pathOr([], ['selectionSet', 'selections'], ast);
-    const props = R.map(R.path(['name', 'value']), selections);
-    const astArgs = R.propOr([], 'arguments', ast);
-    const dataResolved = R.ifElse(
-      R.isEmpty,
-      R.always(dataWithAlias),
+    const selections = _.pathOr([], ['selectionSet', 'selections'], ast);
+    const props = _.map(_.path(['name', 'value']), selections);
+    const astArgs = _.propOr([], 'arguments', ast);
+    const dataResolved = _.ifElse(
+      _.isEmpty,
+      _.always(dataWithAlias),
       getResolved({ data: dataWithAlias, nodeName })
     )(astArgs);
 
-    const nodeValue = R.prop(nodeName, dataResolved);
+    const nodeValue = _.prop(nodeName, dataResolved);
 
     if(Array.isArray(data)) {
       return getItemsResolved({ nodeName, props, data: dataResolved })

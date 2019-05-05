@@ -1,21 +1,21 @@
-const R = require('ramda');
+const _ = require('./utils');
 
 function orderBy(value = [], prop) {
   return value.sort((a, b) => parseFloat(a[prop]) - parseFloat(b[prop]));
 };
 
 const filterKey = (argName) => (data, value) => {
-  return data.filter(item => R.prop(argName, item) == value);
+  return data.filter(item => _.prop(argName, item) == value);
 };
 
-const first = (value = []) => R.prop(0, value);
+const first = (value = []) => _.prop(0, value);
 
-const last = (value = []) => R.last(value);
+const last = (value = []) => _.last(value);
 
 const defaultValue = (value, prop) => {
   const number = Number(prop);
   const valueChanged = number ? number : prop;
-  return R.isNil(value) ? valueChanged : value;
+  return _.isNil(value) ? valueChanged : value;
 };
 
 module.exports = {
