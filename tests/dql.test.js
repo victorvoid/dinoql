@@ -9,7 +9,10 @@ describe('[dql] { keep: false }', () => {
           test3: {
             test4: {
               test5: 10,
-              box: true
+              box: [
+                { name: { full: true }, age: 10 },
+                { name: { full: false }, age: 2 }
+              ]
             },
             age: 10
           }
@@ -25,8 +28,7 @@ describe('[dql] { keep: false }', () => {
         test2 { 
           test3 { 
             test4 { 
-               test5,
-               box
+               test5
             },
             age
           },
@@ -35,7 +37,6 @@ describe('[dql] { keep: false }', () => {
 
     const dataFiltered = {
       test5: 10,
-      box: true,
       age: 10
     };
 
@@ -48,8 +49,7 @@ describe('[dql] { keep: false }', () => {
         test2 { 
           test3 { 
             test4 { 
-               test5,
-               box
+               test5
             },
             ageChanged: age
           },
@@ -58,7 +58,6 @@ describe('[dql] { keep: false }', () => {
 
     const dataFiltered = {
       test5: 10,
-      box: true,
       ageChanged: 10
     };
 
@@ -71,8 +70,7 @@ describe('[dql] { keep: false }', () => {
         test2 { 
           test3 { 
             test4 { 
-               test5,
-               box
+               test5
             },
             notfound(defaultValue: 10)
           },
@@ -81,7 +79,6 @@ describe('[dql] { keep: false }', () => {
 
     const dataFiltered = {
       test5: 10,
-      box: true,
       notfound: 10
     };
 
@@ -89,7 +86,7 @@ describe('[dql] { keep: false }', () => {
   });
 
 
-  test('should return empty object to keys not found', () => {
+  test('should return empty array to keys not found', () => {
     const value = dql(data)` 
       test { 
         testdsjj { 
@@ -101,7 +98,7 @@ describe('[dql] { keep: false }', () => {
         }
       }`;
 
-    expect(value).toEqual({})
+    expect(value).toEqual({testdsjj: []})
   })
 
   test('should get error when resolver does not exist', () => {
@@ -113,6 +110,32 @@ describe('[dql] { keep: false }', () => {
     } catch(e){
       expect(e.message).toBe('Resolver "rskkskksks" does not exist.');
     }
+  })
+
+  test('should works in arrays', () => {
+    const newdata = {
+      users: [{
+        name: 'Victor Igor',
+        id: "100",
+        age: 40
+      }, {
+        name: 'Kant Jonas',
+        id: "200",
+        age: 35
+      }]
+    };
+
+    const value = dql(newdata)`
+      newUsers: users(id: "200") {
+        name  
+      }
+    `;
+
+    const dataFiltered = {
+      newUsers: [{ name: 'Kant Jonas' }]
+    };
+
+    expect(value).toEqual(dataFiltered);
   })
 });
 
