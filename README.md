@@ -34,10 +34,10 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 
 - ♥️  GraphQL syntax.
 - 🔫 Safe access (no runtime errors to keys that does not exist).
-- ⚡️  Aliases support (You can rename your keys in the query).
-- 🌟 Many resolvers implemented by default.
-- 🎒 Filter values according to the value like: `users(id: 10)`.
-- 🔥 Customizable.
+- ⚡️  [Aliases](#aliases---renaming-keys) support (You can rename your keys in the query).
+- 🌟 Many [resolvers](#resolvers) implemented by default.
+- 🎒 [Filter values according to the value](#get-user-by-id).
+- 🔥 [Customizable](#custom-options).
 
 ## Documentation
 
