@@ -46,10 +46,19 @@ const defaultValue = (value, prop) => {
   return _.isNil(value) ? valueChanged : value;
 };
 
+/**
+ * @param {*} value - A value to parse.
+ * @returns {*} Returns a new value parsed to number.
+ */
+const toNumber = (value) => {
+  return Number(value) || value;
+};
+
 module.exports = {
   filterKey,
   orderBy,
   first,
   last,
+  toNumber,
   defaultValue
 };

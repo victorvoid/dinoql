@@ -15,7 +15,8 @@ describe('[dql] resolvers', () => {
               ]
             },
             age: 10
-          }
+          },
+          id: "20"
         }
       },
       peoples: 2
@@ -46,6 +47,23 @@ describe('[dql] resolvers', () => {
       };
 
       expect(value).toEqual(dataFiltered);
+    });
+  });
+
+  describe('[parseInt]', () => {
+    test('should parse to integer', () => {
+      const value = dql(data)` 
+      test { 
+        test2 { 
+          id(toNumber: true)
+        }
+      }`;
+
+      const dataParsed = {
+        id: 20
+      };
+
+      expect(value).toEqual(dataParsed);
     });
   })
 });
