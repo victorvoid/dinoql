@@ -1,3 +1,9 @@
+/**
+ * @param {string} oldProp - The prop to rename
+ * @param {string} newProp - The prop to add
+ * @param {object} data - The object to change
+ * @returns {object} Returns object with `oldProp` renamed to `newProp`
+ */
 const renameProp = (oldProp, newProp, { [oldProp]: old, ...others }) => ({
   [newProp]: old,
   ...others,
@@ -24,7 +30,7 @@ const ast = {
   getValue: R.path(['value', 'value']),
   getAlias: R.path(['alias', 'value']),
   getName: R.path(['name', 'value'])
-}
+};
 
 module.exports = {
   ...R,

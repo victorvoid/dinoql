@@ -3,6 +3,13 @@ const _ = require('./utils');
 
 function Transform(options) {
   let _objToGet = {};
+
+  /**
+   * @param {object} obj - An object
+   * @param {object} obj.data - The object to query
+   * @param {object} obj.nodeName - The name from node
+   * @returns {Function} Returns the function to execute all resolvers from node.
+   */
   const getResolved = ({ data, nodeName }) => args => {
     const arr = _.prop(nodeName, data);
     const result = args.reduce((acc, arg) => {
@@ -15,6 +22,14 @@ function Transform(options) {
     return _.assoc(nodeName, result, data)
   };
 
+  /**
+   * The idea is iterate through list and when item is object, get each value and filter.
+   * @param {object} obj - An object
+   * @param {object} obj.data - The object to query
+   * @param {string} obj.nodeName - The name from node
+   * @param {array} obj.props - The array of names from selections node
+   * @returns {*} Returns an array filtered according to the `obj.props`
+   */
   const getItemsResolved = ({ nodeName, props, data }) => {
     return data.reduce((acc, item) => {
       if(typeof(item) === 'object') {
@@ -34,6 +49,16 @@ function Transform(options) {
     }, []);
   };
 
+  /**
+   * The idea is iterate through `obj.selections` that are children from current node and filter.
+   * @param {object} obj - An object
+   * @param {object} obj.data - The object to query
+   * @param {array} obj.props - The array of names from selections node
+   * @param {object} obj.selections - The selections obj from node
+   * @param {string} obj.nodeName - The name from node
+   * @param {*} obj.nodeValue - The value from `obj.data` according to the `obj.nodeName`
+   * @returns {Function} Returns `obj.data` filtered according to the `obj.selections`
+   */
   const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props }) => {
     const getFiltered = _.ifElse(
       Array.isArray,
@@ -63,6 +88,11 @@ function Transform(options) {
     return result;
   };
 
+  /**
+   * @param {object} ast - Abstract Syntax Tree
+   * @param {object} data - The data to query
+   * @returns {Function} Returns `data` filtered according to the query using recursion.
+   */
   function getQueryResolved(ast, data = {}) {
     const nodeAlias = _.ast.getAlias(ast);
     const oldNodeName = _.ast.getName(ast);
