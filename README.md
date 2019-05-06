@@ -37,6 +37,7 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 - ⚡️  [Aliases](#aliases---renaming-keys) support (You can rename your keys in the query).
 - 🌟 Many [resolvers](#resolvers) implemented by default.
 - 🎒 [Filter values according to the value](#get-user-by-id).
+- 💾 Caching support
 - 🔥 [Customizable](#custom-options).
 
 ## Documentation
