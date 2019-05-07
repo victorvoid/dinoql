@@ -9,21 +9,22 @@ let memo = {};
  * @returns {object} Returns data filtered according to the query
  */
 function dinoql(data, options = { keep: false }) {
-  const newData = { MyQuery: data };
   return (query) => {
     const dataIndex = JSON.stringify({ data, query });
     if(dataIndex in memo) {
       return memo[dataIndex];
     }
 
-    const ast = parser(_.prop(0, query));
+    const ast = parser(query);
     const body = _.path(['definitions', 0], ast);
+    const bodyName = _.ast.getName(body);
     const { getQueryResolved } = transform(options);
 
-    const result = getQueryResolved(body, newData);
+    const result = getQueryResolved(body, { [bodyName]: data });
 
     if(options.keep) {
-      return result.MyQuery;
+      const keyName = _.prop(0, Object.keys(result));
+      return _.prop(keyName, result);
     }
 
     memo[dataIndex] = result;
