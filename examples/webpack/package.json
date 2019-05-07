@@ -1,0 +1,19 @@
+{
+  "name": "dinoql-webpack-example",
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-loader": "^8.0.5",
+    "graphql": "^14.2.1",
+    "graphql-tag": "^2.10.1",
+    "jest": "^24.7.1",
+    "ramda": "^0.26.1",
+    "webpack": "^4.30.0",
+    "webpack-cli": "3.0.2"
+  }
+}
