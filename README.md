@@ -19,6 +19,7 @@ A query language for JavaScript Objects using GraphQL syntax.
     - [Last](#last)
   - [Custom options](#custom-options)
     - [Keep structure](#keep-structure)
+  - [Improve Performance](#improve-performance-)
 
 ## Installation
 
@@ -36,6 +37,7 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 - 🔫 Safe access (no runtime errors to keys that does not exist).
 - ⚡️  [Aliases](#aliases---renaming-keys) support (You can rename your keys in the query).
 - 🌟 Many [resolvers](#resolvers) implemented by default.
+- 🏄 Parse your queries in build time. ([Example](https://github.com/victorvoid/dinoql/tree/master/examples/webpack))
 - 🎒 [Filter values according to the value](#get-user-by-id).
 - 💾 Caching support
 - 🔥 [Customizable](#custom-options).
@@ -227,6 +229,36 @@ console.log(users)
 } 
 */
 ```
+
+### Improve performance 🏄
+
+You can improve performance parsing in build time your queries.
+
+#### How ?
+
+1. Create files `.graphql` or `.gql` and add your queries.
+
+2. Import your queries from `.graphql|.gql`
+
+```graphql
+# your queries
+
+query MyQuery {
+  requests {
+    users
+  }
+}
+```
+
+```js
+//your js
+import dinoql from 'dinoql'
+import { MyQuery } from './MyQueries';
+
+const users = dinoql(data)(MyQuery)
+```
+
+3. Setup your webpack - [example](https://github.com/victorvoid/dinoql/tree/master/examples/webpack)
 
 License
 -------
