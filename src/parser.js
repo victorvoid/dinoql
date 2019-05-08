@@ -1,6 +1,6 @@
 const _ = require('./utils');
 const { parse } = require('graphql/language/parser');
-
+const fragments = require('./fragments');
 /**
  * @param {string} code - The code to parse
  * @returns {object} Returns an ast from code
@@ -8,7 +8,7 @@ const { parse } = require('graphql/language/parser');
 function parser(code) {
   const query = _.prop(0, code);
   if(typeof(query) !== 'string') {
-    return code
+    return fragments.mergeFragments(code)
   }
 
   const ql = ` 

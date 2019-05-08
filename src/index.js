@@ -1,7 +1,6 @@
 const _ = require('./utils');
 const parser = require('./parser');
 const transform = require('./transform');
-
 let memo = {};
 /**
  * @param {object} data - The data to filter
@@ -18,6 +17,7 @@ function dinoql(data, options = { keep: false }) {
     const ast = parser(query);
     const body = _.path(['definitions', 0], ast);
     const bodyName = _.ast.getName(body);
+
     const { getQueryResolved } = transform(options);
 
     const result = getQueryResolved(body, { [bodyName]: data });

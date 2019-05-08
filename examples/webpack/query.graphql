@@ -1,5 +1,17 @@
+fragment queryOne on Query {
+  users {
+    name
+  }
+}
+
+fragment queryTwo on Query {
+  products
+}
+
 query Form {
-    requests {
-        friends
-    }
+  requests {
+    ...queryOne,
+    ...queryTwo,
+    friends
+  }
 }
