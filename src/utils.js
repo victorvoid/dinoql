@@ -11,6 +11,7 @@ const renameProp = (oldProp, newProp, { [oldProp]: old, ...others }) => ({
 
 const R = {
   prop: require('ramda/src/prop'),
+  pathEq: require('ramda/src/pathEq'),
   propOr: require('ramda/src/propOr'),
   path: require('ramda/src/path'),
   pathOr: require('ramda/src/pathOr'),
@@ -23,7 +24,11 @@ const R = {
   always: require('ramda/src/always'),
   isEmpty: require('ramda/src/isEmpty'),
   assoc: require('ramda/src/assoc'),
-  identity: require('ramda/src/identity')
+  identity: require('ramda/src/identity'),
+  find: require('ramda/src/find'),
+  assocPath: require('ramda/src/assocPath'),
+  init: require('ramda/src/init'),
+  concat: require('ramda/src/concat')
 };
 
 const ast = {

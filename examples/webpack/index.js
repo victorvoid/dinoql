@@ -31,6 +31,7 @@ const data = {
 // `;
 
 const user = dinoql(data)(Form);
-console.log('user', user);
-// user { friends: [ { name: 'Kátia', id: '300', age: 10 } ] }
-
+console.log(user);
+// { friends: [ { name: 'Kátia', id: '300', age: 10 } ],
+//   users: [ { name: 'Victor Igor' }, { name: 'Kant Jonas' } ],
+//   products: [] }
