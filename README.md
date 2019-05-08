@@ -37,6 +37,7 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 - 🔫 Safe access (no runtime errors to keys that does not exist).
 - ⚡️  [Aliases](#aliases---renaming-keys) support (You can rename your keys in the query).
 - 🌟 Many [resolvers](#resolvers) implemented by default.
+- 💥 [Fragments support](#fragments-support-)(share piece of query logic).
 - 🏄 Parse your queries in build time. ([Example](https://github.com/victorvoid/dinoql/tree/master/examples/webpack))
 - 🎒 [Filter values according to the value](#get-user-by-id).
 - 💾 Caching support
@@ -259,6 +260,31 @@ const users = dinoql(data)(MyQuery)
 ```
 
 3. Setup your webpack - [example](https://github.com/victorvoid/dinoql/tree/master/examples/webpack)
+
+### Fragments support 💥
+
+You can share piece of query logic.
+
+```graphql
+fragment queryOne on Query {
+  users {
+    name
+  }
+}
+
+fragment queryTwo on Query {
+  products
+}
+
+query Form {
+  requests {
+    ...queryOne,
+    ...queryTwo,
+    friends
+  }
+}
+
+```
 
 License
 -------
