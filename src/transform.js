@@ -80,7 +80,10 @@ function Transform(options) {
       if(Array.isArray(value)) {
         _objToGet[nodeName] = value
       } else if(!sel.selectionSet) {
-        _objToGet[name] = _.prop(name, value);
+        const valueFromNode = _.prop(name, value)
+        if(valueFromNode) {
+          _objToGet[name] = valueFromNode;
+        }
       }
 
       return _objToGet;
