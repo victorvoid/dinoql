@@ -18,7 +18,7 @@ function mergeFragments(ast) {
   }
  });
 
- return editedAst
+ return editedAst || ast
 }
 
 module.exports = {
