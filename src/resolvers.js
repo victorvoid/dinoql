@@ -67,6 +67,18 @@ const toArray = (value) => {
   return toIndividualKeys(value);
 };
 
+/**
+ * @param {*} value - A value to parse.
+ * @returns {array} Returns only values from object.
+ */
+const getObjectValues = (value) => {
+  if(typeof(value) === 'object') {
+    return Object.values(value)
+  }
+
+  return value
+};
+
 module.exports = {
   filterKey,
   orderBy,
@@ -74,5 +86,6 @@ module.exports = {
   last,
   toNumber,
   defaultValue,
-  toArray
+  toArray,
+  getObjectValues
 };

@@ -88,5 +88,27 @@ describe('[dql] resolvers', () => {
       expect(value).toEqual(dataParsed);
     });
   })
+
+  describe('[Get only values from object]', () => {
+    test('should get only values form object', () => {
+      const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 {
+            test4(getObjectValues: true)
+          }
+        }
+      }`;
+
+      const dataParsed = {
+        test4: [
+          10,
+          [{name: {full: true}, age: 10}, {name: {full: false}, age: 2}]
+        ]
+      };
+
+      expect(value).toEqual(dataParsed);
+    });
+  })
 });
 
