@@ -1,5 +1,4 @@
 const resolvers = require('./resolvers');
-const Fragments = require('./Fragments');
 const _ = require('./utils');
 
 function Transform(options) {
