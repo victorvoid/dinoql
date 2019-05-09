@@ -54,11 +54,25 @@ const toNumber = (value) => {
   return Number(value) || value;
 };
 
+/**
+ * @param {*} value - A value to parse.
+ * @returns {*} Returns object parsed to array.
+ */
+const toArray = (value) => {
+  const toIndividualKeys = _.pipe(
+    _.toPairs,
+    _.map(_.pipe(_.of, _.fromPairs))
+  );
+
+  return toIndividualKeys(value);
+};
+
 module.exports = {
   filterKey,
   orderBy,
   first,
   last,
   toNumber,
-  defaultValue
+  defaultValue,
+  toArray
 };

@@ -28,7 +28,11 @@ const R = {
   find: require('ramda/src/find'),
   assocPath: require('ramda/src/assocPath'),
   init: require('ramda/src/init'),
-  concat: require('ramda/src/concat')
+  concat: require('ramda/src/concat'),
+  pipe: require('ramda/src/pipe'),
+  toPairs: require('ramda/src/toPairs'),
+  fromPairs: require('ramda/src/fromPairs'),
+  of: require('ramda/src/of'),
 };
 
 const ast = {

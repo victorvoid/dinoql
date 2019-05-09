@@ -66,5 +66,27 @@ describe('[dql] resolvers', () => {
       expect(value).toEqual(dataParsed);
     });
   })
+
+  describe('[parse to array]', () => {
+    test('should parse to array', () => {
+      const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 {
+            test4(toArray: true)
+          }
+        }
+      }`;
+
+      const dataParsed = {
+        test4: [
+          {test5: 10},
+          {box: [{name: {full: true}, age: 10}, {name: {full: false}, age: 2}]}
+        ]
+      };
+
+      expect(value).toEqual(dataParsed);
+    });
+  })
 });
 
