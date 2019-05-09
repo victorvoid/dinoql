@@ -114,25 +114,41 @@ describe('[dql] { keep: false }', () => {
 
   test('should works in arrays', () => {
     const newdata = {
-      users: [{
-        name: 'Victor Igor',
-        id: "100",
-        age: 40
-      }, {
-        name: 'Kant Jonas',
-        id: "200",
-        age: 35
-      }]
+      data: {
+        users: [{
+          name: 'Victor Igor',
+          id: "100",
+          age: 40,
+          test: {
+            text: true,
+            html: {
+              _data: {}
+            }
+          }
+        }, {
+          name: 'Kant Jonas',
+          id: "200",
+          age: 35,
+          test: {
+            text: true,
+            html: {
+              _data: {}
+            }
+          }
+        }]
+      }
     };
 
     const value = dql(newdata)`
-      newUsers: users(id: "200") {
-        name  
+      data {
+        users(id: "200") {
+          name
+        }
       }
     `;
 
     const dataFiltered = {
-      newUsers: [{ name: 'Kant Jonas' }]
+      users: [{ name: 'Kant Jonas' }]
     };
 
     expect(value).toEqual(dataFiltered);

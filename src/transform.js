@@ -26,27 +26,14 @@ function Transform(options) {
    * The idea is iterate through list and when item is object, get each value and filter.
    * @param {object} obj - An object
    * @param {object} obj.data - The object to query
-   * @param {string} obj.nodeName - The name from node
-   * @param {array} obj.props - The array of names from selections node
-   * @returns {*} Returns an array filtered according to the `obj.props`
+   * @param {object} obj.ast - Abstract Syntax Tree
    */
-  const getItemsResolved = ({ nodeName, props, data }) => {
-    return data.reduce((acc, item) => {
-      if(typeof(item) === 'object') {
-        const obj = _.propOr([], nodeName, item);
-        const getFiltered = _.ifElse(
-          Array.isArray,
-          _.project(props),
-          _.identity
-        );
+  const getItemsResolved = ({ data, ast }) => {
+    data.forEach((item) => {
+      getQueryResolved(ast, item);
+    });
 
-        const value = _.assoc(nodeName, getFiltered(obj), item);
-
-        return [...acc, value];
-      }
-
-      return acc;
-    }, []);
+    return data;
   };
 
   /**
@@ -113,7 +100,7 @@ function Transform(options) {
     const nodeValue = _.prop(nodeName, dataResolved);
 
     if(Array.isArray(dataResolved)) {
-      return getItemsResolved({ nodeName, props, data: dataResolved })
+      return getItemsResolved({ nodeName, props, data: dataResolved, ast })
     }
 
     return getChildreansResolved({
