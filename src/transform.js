@@ -29,11 +29,17 @@ function Transform(options) {
    * @param {object} obj.ast - Abstract Syntax Tree
    */
   const getItemsResolved = ({ data, ast }) => {
-    data.forEach((item) => {
-      getQueryResolved(ast, item);
-    });
+    const lastObjToGet = _objToGet;
+    const result = data.reduce((acc, item) => {
+      _objToGet = {};
+      const value = getQueryResolved(ast, item)
+      const nodeName = _.ast.getName(ast) || _.ast.getAlias(ast);
+      const itemFiltered = _.dissoc(nodeName, item);
+      return acc.concat({ ...itemFiltered, ...value });
+    }, []);
 
-    return data;
+    _objToGet = lastObjToGet;
+    return result;
   };
 
   /**
@@ -54,7 +60,6 @@ function Transform(options) {
     );
 
     const filtered = getFiltered(nodeValue || []);
-
     const result = selections.reduce((acc, sel) => {
       const value = getQueryResolved(sel, filtered);
 

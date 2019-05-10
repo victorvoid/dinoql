@@ -153,5 +153,55 @@ describe('[dql] { keep: false }', () => {
 
     expect(value).toEqual(dataFiltered);
   })
+
+  test('should works nesting array', () => {
+    const newdata = {
+      data: {
+        users: [{
+          name: 'Victor Igor',
+          id: "100",
+          age: 40,
+          test: {
+            text: true,
+            html: {
+              _data: {}
+            }
+          }
+        }, {
+          name: 'Kant Jonas',
+          id: "200",
+          age: 35,
+          test: {
+            text: 'he',
+            html: {
+              _data: [{ name: 'vic', age: 20 }]
+            }
+          }
+        }]
+      }
+    };
+
+    const value = dql(newdata)`
+      data {
+        users(id: "200") {
+          name,
+          test {
+            text,
+            html {
+              _data {
+                name
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const dataFiltered = {
+      users: [{ name: 'Kant Jonas', text: 'he', _data: [{ name: 'vic' }] }]
+    };
+
+    expect(value).toEqual(dataFiltered);
+  })
 });
 

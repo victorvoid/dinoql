@@ -24,6 +24,7 @@ const R = {
   always: require('ramda/src/always'),
   isEmpty: require('ramda/src/isEmpty'),
   assoc: require('ramda/src/assoc'),
+  dissoc: require('ramda/src/dissoc'),
   identity: require('ramda/src/identity'),
   find: require('ramda/src/find'),
   assocPath: require('ramda/src/assocPath'),
