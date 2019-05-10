@@ -20,6 +20,7 @@ const R = {
   pick: require('ramda/src/pick'),
   project: require('ramda/src/project'),
   ifElse: require('ramda/src/ifElse'),
+  cond: require('ramda/src/cond'),
   map: require('ramda/src/map'),
   always: require('ramda/src/always'),
   isEmpty: require('ramda/src/isEmpty'),
@@ -34,6 +35,8 @@ const R = {
   toPairs: require('ramda/src/toPairs'),
   fromPairs: require('ramda/src/fromPairs'),
   of: require('ramda/src/of'),
+  is: require('ramda/src/is'),
+  T: require('ramda/src/T')
 };
 
 const ast = {

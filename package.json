@@ -1,6 +1,6 @@
 {
   "name": "dinoql",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "description": "A query language for JavaScript Objects using GraphQL syntax.",
   "main": "dist/dinoql.min.js",
   "scripts": {

@@ -54,11 +54,11 @@ function Transform(options) {
    * @returns {Function} Returns `obj.data` filtered according to the `obj.selections`
    */
   const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props }) => {
-    const getFiltered = _.ifElse(
-      Array.isArray,
-      _.project(props),
-      _.pick(props)
-    );
+    const getFiltered = _.cond([
+      [Array.isArray, _.project(props)],
+      [_.is(Object), _.pick(props)],
+      [_.T, _.identity]
+    ]);
 
     const filtered = getFiltered(nodeValue || []);
     lastArrayFiltered = null;
