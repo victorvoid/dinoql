@@ -28,17 +28,18 @@ function Transform(options) {
    * @param {object} obj.data - The object to query
    * @param {object} obj.ast - Abstract Syntax Tree
    */
-  const getItemsResolved = ({ data, ast }) => {
+  let lastArrayFiltered = null
+  const getItemsResolved = ({ data, ast, nodeName }) => {
     const lastObjToGet = _objToGet;
+    _objToGet = {};
     const result = data.reduce((acc, item) => {
-      _objToGet = {};
-      const value = getQueryResolved(ast, item)
-      const nodeName = _.ast.getName(ast) || _.ast.getAlias(ast);
+      const value = getQueryResolved(ast, item);
       const itemFiltered = _.dissoc(nodeName, item);
       return acc.concat({ ...itemFiltered, ...value });
     }, []);
 
     _objToGet = lastObjToGet;
+    lastArrayFiltered = result;
     return result;
   };
 
@@ -60,8 +61,9 @@ function Transform(options) {
     );
 
     const filtered = getFiltered(nodeValue || []);
-    const result = selections.reduce((acc, sel) => {
-      const value = getQueryResolved(sel, filtered);
+    lastArrayFiltered = null;
+    return selections.reduce((acc, sel) => {
+      const value = getQueryResolved(sel, lastArrayFiltered || filtered);
 
       if(options.keep) {
         return _.assoc(nodeName, value, acc)
@@ -79,8 +81,6 @@ function Transform(options) {
 
       return _objToGet;
     }, data);
-
-    return result;
   };
 
   /**

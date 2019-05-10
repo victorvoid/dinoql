@@ -203,5 +203,63 @@ describe('[dql] { keep: false }', () => {
 
     expect(value).toEqual(dataFiltered);
   })
+
+  test('should works parsing to array and filter', () => {
+    const newdata = {
+      data: {
+        users: [{
+          name: 'Victor Igor',
+          id: "100",
+          age: 40,
+          test: {
+            text: true,
+            html: {
+              _data: {}
+            }
+          }
+        }, {
+          name: 'Kant Jonas',
+          id: "200",
+          age: 35,
+          test: {
+            text: 'he',
+            html: {
+              _data: { name: 'vic', age: { text: '30'}, title: { text: 'jose'} },
+              _other: { name: 'vic', age: { text: '20'}, title: { text: 'icon'} }
+            }
+          }
+        }]
+      }
+    };
+
+    const value = dql(newdata)`
+      data {
+        users(id: "200") {
+          name,
+          test {
+            text,
+            html(getObjectValues: true) {
+              title {
+                title: text
+              },
+              
+              age {
+                age: text
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const dataFiltered = {
+      users: [{
+        name: 'Kant Jonas',
+        text: 'he',
+        html: [{ title: 'jose', age: '30' }, { title: 'icon', age: '20' }] }]
+    };
+
+    expect(value).toEqual(dataFiltered);
+  })
 });
 
