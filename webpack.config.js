@@ -6,7 +6,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     library: 'dinoql',
     libraryTarget: 'umd',
-    filename: 'dinoql.min.js'
+    filename: 'dinoql.min.js',
+    umdNamedDefine: true,
+    globalObject: 'this'
   },
   module: {
     rules: [
