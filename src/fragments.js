@@ -1,7 +1,6 @@
 const { visit } = require('graphql/language/visitor');
 const _ = require('./utils');
 
-
 function mergeFragments(ast) {
  const definitions = _.prop('definitions', ast);
  let editedAst = null;

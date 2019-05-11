@@ -34,6 +34,7 @@ const R = {
   pipe: require('ramda/src/pipe'),
   toPairs: require('ramda/src/toPairs'),
   fromPairs: require('ramda/src/fromPairs'),
+  equals: require('ramda/src/equals'),
   of: require('ramda/src/of'),
   is: require('ramda/src/is'),
   T: require('ramda/src/T')

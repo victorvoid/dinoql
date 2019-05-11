@@ -34,8 +34,12 @@ function Transform(options) {
     _objToGet = {};
     const result = data.reduce((acc, item) => {
       const value = getQueryResolved(ast, item);
-      const itemFiltered = _.dissoc(nodeName, item);
-      return acc.concat({ ...itemFiltered, ...value });
+      const nodeValue = _.prop(nodeName, item);
+      if(!_.isNil(nodeValue)) {
+        const itemFiltered = _.dissoc(nodeName, item);
+        return acc.concat({ ...itemFiltered, ...value });
+      }
+      return acc;
     }, []);
 
     _objToGet = lastObjToGet;
@@ -64,17 +68,20 @@ function Transform(options) {
     lastArrayFiltered = null;
     return selections.reduce((acc, sel) => {
       const value = getQueryResolved(sel, lastArrayFiltered || filtered);
+      if(!_.equals(value, lastArrayFiltered)) {
+        lastArrayFiltered = null;
+      }
 
       if(options.keep) {
         return _.assoc(nodeName, value, acc)
       }
 
       const name = _.ast.getAlias(sel) || _.ast.getName(sel);
-      if(Array.isArray(value)) {
+      if(Array.isArray(value) && value.length) {
         _objToGet[nodeName] = value
       } else if(!sel.selectionSet) {
         const valueFromNode = _.prop(name, value)
-        if(valueFromNode) {
+        if(!_.isNil(valueFromNode)) {
           _objToGet[name] = valueFromNode;
         }
       }

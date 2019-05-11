@@ -5,13 +5,14 @@ fragment queryOne on Query {
 }
 
 fragment queryTwo on Query {
-  products
+  products {
+    test
+  }
 }
 
 query Form {
   requests {
-    ...queryOne,
     ...queryTwo,
-    friends
+    ...queryOne
   }
 }

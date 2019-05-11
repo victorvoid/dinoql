@@ -22,7 +22,7 @@ describe('[dql] { keep: false }', () => {
     };
   });
 
-  test('should return only values', () => {
+  test('should return only values from last nesting', () => {
     const value = dql(data)` 
       test { 
         test2 { 
@@ -86,7 +86,7 @@ describe('[dql] { keep: false }', () => {
   });
 
 
-  test('should return empty array to keys not found', () => {
+  test('shouldn\'t get keys that value is undefined or null', () => {
     const value = dql(data)` 
       test { 
         testdsjj { 
@@ -98,8 +98,21 @@ describe('[dql] { keep: false }', () => {
         }
       }`;
 
-    expect(value).toEqual({testdsjj: []})
-  })
+    expect(value).toEqual({})
+  });
+
+  test('shouldn\'t get keys that value is undefined or null from array', () => {
+    const newdata = {
+      data: [{ test: 1 }]
+    };
+
+    const value = dql(newdata)` 
+      data { 
+        testdsjj 
+      }`;
+
+    expect(value).toEqual({})
+  });
 
   test('should get error when resolver does not exist', () => {
     try {
@@ -110,10 +123,10 @@ describe('[dql] { keep: false }', () => {
     } catch(e){
       expect(e.message).toBe('Resolver "rskkskksks" does not exist.');
     }
-  })
+  });
 
   test('should works in arrays', () => {
-    const newdata = {
+    const newData = {
       data: {
         users: [{
           name: 'Victor Igor',
@@ -139,7 +152,7 @@ describe('[dql] { keep: false }', () => {
       }
     };
 
-    const value = dql(newdata)`
+    const value = dql(newData)`
       data {
         users(id: "200") {
           name
@@ -152,7 +165,7 @@ describe('[dql] { keep: false }', () => {
     };
 
     expect(value).toEqual(dataFiltered);
-  })
+  });
 
   test('should works nesting array', () => {
     const newdata = {
@@ -202,7 +215,7 @@ describe('[dql] { keep: false }', () => {
     };
 
     expect(value).toEqual(dataFiltered);
-  })
+  });
 
   test('should works parsing to array and filter', () => {
     const newdata = {
@@ -260,6 +273,6 @@ describe('[dql] { keep: false }', () => {
     };
 
     expect(value).toEqual(dataFiltered);
-  })
+  });
 });
 

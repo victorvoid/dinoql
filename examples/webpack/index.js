@@ -3,7 +3,7 @@ import { Form } from './query.graphql';
 
 const data = {
   requests: {
-    products: [],
+    products: [{ test: 0, other: false}],
 
     users: [{
       name: 'Victor Igor',
