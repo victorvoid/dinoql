@@ -15,7 +15,12 @@ function orderBy(list = [], prop) {
  * @param {string} value - The value to use for filter
  * @returns {array} Returns data filtered according to the prop
  */
-const filterKey = (argName) => (data, value) => {
+const filterKey = (argName, customResolvers) => (data, value) => {
+  const fnCustomResolver = _.prop(argName, customResolvers);
+  if(fnCustomResolver) {
+    return fnCustomResolver(data, value);
+  }
+
   if(!data) {
     throw new Error(`Resolver "${argName}" does not exist.`)
   }

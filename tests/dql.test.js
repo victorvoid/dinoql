@@ -1,4 +1,5 @@
 const dql = require('../src');
+const { addResolvers } = require('../src');
 
 describe('[dql] { keep: false }', () => {
   let data = {};
@@ -273,6 +274,33 @@ describe('[dql] { keep: false }', () => {
     };
 
     expect(value).toEqual(dataFiltered);
+  });
+
+  test('should works custom resolvers', () => {
+    const inc = (list, prop) => {
+      const valueToInc = Number(prop);
+      return list.map(item => ({ ...item, age: item.age + valueToInc }));
+    };
+
+    addResolvers(({ inc }));
+
+    const value = dql(data)`
+      test {
+        test2 {
+          test3 {
+            test4 {
+              box(inc: 1)
+            }
+          }
+        }
+      }
+    `;
+
+    const dataChanged = {
+      box: [{ name: { full: true}, age: 11}, { name: { full: false}, age: 3}]
+    };
+
+    expect(value).toEqual(dataChanged);
   });
 });
 

@@ -1,6 +1,7 @@
 const _ = require('./utils');
 const parser = require('./parser');
 const transform = require('./transform');
+let customResolvers = {};
 let memo = {};
 /**
  * @param {object} data - The data to filter
@@ -18,7 +19,7 @@ function dinoql(data, options = { keep: false }) {
     const body = _.path(['definitions', 0], ast);
     const bodyName = _.ast.getName(body);
 
-    const { getQueryResolved } = transform(options);
+    const { getQueryResolved } = transform(options, customResolvers);
 
     const result = getQueryResolved(body, { [bodyName]: data });
 
@@ -32,4 +33,13 @@ function dinoql(data, options = { keep: false }) {
   }
 }
 
+const addResolvers = (res) => {
+  if(_.is(Object, res)) {
+    customResolvers = { ...res, ...customResolvers };
+  } else {
+    throw new Error('Invalid parameter: must be an object.')
+  }
+};
+
 module.exports = dinoql;
+module.exports.addResolvers = addResolvers;

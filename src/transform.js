@@ -1,7 +1,7 @@
 const resolvers = require('./resolvers');
 const _ = require('./utils');
 
-function Transform(options) {
+function Transform(options, customResolvers) {
   let _objToGet = {};
 
   /**
@@ -15,7 +15,7 @@ function Transform(options) {
     const result = args.reduce((acc, arg) => {
       const name = _.ast.getName(arg);
       const value = _.ast.getValue(arg);
-      const resolver = _.propOr(resolvers.filterKey(name), name, resolvers);
+      const resolver = _.propOr(resolvers.filterKey(name, customResolvers), name, resolvers);
       return resolver(arr, value);
     }, arr);
 
