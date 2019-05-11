@@ -18,6 +18,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
     - [Parse to Number](#parse-to-number)
     - [First](#first)
     - [Last](#last)
+  - [Building your own resolver](#building-your-own-resolver)
   - [Custom options](#custom-options)
     - [Keep structure](#keep-structure)
   - [Improve Performance](#improve-performance-)
@@ -38,6 +39,7 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 - 🔫 Safe access (no runtime errors to keys that does not exist).
 - ⚡️  [Aliases](#aliases---renaming-keys) support (You can rename your keys in the query).
 - 🌟 Many [resolvers](#resolvers) implemented by default.
+- 🐣 [Build your own resolver](#building-your-own-resolver).
 - 💥 [Fragments support](#fragments-support-)(share piece of query logic).
 - 🏄 Parse your queries in build time. ([Example](https://github.com/victorvoid/dinoql/tree/master/examples/webpack))
 - 🎒 [Filter values according to the value](#get-user-by-id).
@@ -205,6 +207,31 @@ const users = dinoql(data)`
 `
 
 console.log(users)  //{ users: { name: 'Kant Jonas' } }
+```
+
+### Building your own resolver
+
+You can create a function to change a value in query.
+
+```js
+import dql, { addResolvers } from 'dinoql';
+
+const incAge = (list, right) => {
+  const valueToInc = Number(right);
+  return list.map(item => ({ ...item, age: item.age + valueToInc }));
+};
+
+addResolvers(({ incAge }));
+
+const value = dql(data)`
+  requests {
+    users(incAge: 2) {
+      name,
+      age
+    }
+  }
+`;
+// { users: [{ name: 'Victor Igor', age: 42 }, { name: 'Kant Jonas', age: 37 }] }
 ```
 
 ### Custom options
