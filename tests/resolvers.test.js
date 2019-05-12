@@ -110,5 +110,75 @@ describe('[dql] resolvers', () => {
       expect(value).toEqual(dataParsed);
     });
   })
+
+  describe('[Condition resolvers]', () => {
+    test('should get fields only if condition is true', () => {
+      const value = dql(data)` 
+        test { 
+          test2 { 
+            test3 {
+              test4(if: true) {
+                test5
+              }
+            }
+          }
+        }`;
+
+      expect(value).toEqual({ test5: 10 });
+    });
+
+    test('shouldn\'t get fields only if condition is false', () => {
+      const value = dql(data)` 
+        test { 
+          test2 { 
+            test3 {
+              test4(if: false) {
+                test5
+              }
+            }
+          }
+        }`;
+
+      expect(value).toEqual({});
+    });
+
+    test('should get value from variable and get fields when is true', () => {
+      const variables = {
+        cond: true
+      };
+
+      const value = dql(data, { variables })` 
+        test { 
+          test2 { 
+            test3 {
+              test4(if: $cond) {
+                test5
+              }
+            }
+          }
+        }`;
+
+      expect(value).toEqual({ test5: 10});
+    });
+
+    test('shouldn\'t get value from variable and get fields when is false', () => {
+      const variables = {
+        cond: false
+      };
+
+      const value = dql(data, { variables })` 
+        test { 
+          test2 { 
+            test3 {
+              test4(if: $cond) {
+                test5
+              }
+            }
+          }
+        }`;
+
+      expect(value).toEqual({});
+    });
+  })
 });
 

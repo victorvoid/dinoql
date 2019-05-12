@@ -10,7 +10,7 @@ let memo = {};
  */
 function dinoql(data, options = { keep: false }) {
   return (query) => {
-    const dataIndex = JSON.stringify({ data, query });
+    const dataIndex = JSON.stringify({ data, query, options });
     if(dataIndex in memo) {
       return memo[dataIndex];
     }

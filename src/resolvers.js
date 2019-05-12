@@ -21,7 +21,7 @@ const filterKey = (argName, customResolvers) => (data, value) => {
     return fnCustomResolver(data, value);
   }
 
-  if(!data) {
+  if(!Array.isArray(data)) {
     throw new Error(`Resolver "${argName}" does not exist.`)
   }
 
@@ -78,6 +78,15 @@ const getObjectValues = _.ifElse(
   _.identity
 );
 
+const condIf = (value, right) => {
+  try {
+    const cond = JSON.parse(right);
+    return cond ? value : null ;
+  } catch(e) {
+    throw new Error('Resolver \'if\' needs to receive a boolean type.');
+  }
+};
+
 module.exports = {
   filterKey,
   orderBy,
@@ -86,5 +95,6 @@ module.exports = {
   toNumber,
   defaultValue,
   toArray,
-  getObjectValues
+  getObjectValues,
+  if: condIf
 };
