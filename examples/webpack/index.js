@@ -30,8 +30,10 @@ const data = {
 //   }
 // `;
 
-const user = dinoql(data)(Form);
+const variables = {
+  id: "200"
+};
+
+const user = dinoql(data, { variables })(Form);
 console.log(user);
-// { friends: [ { name: 'Kátia', id: '300', age: 10 } ],
-//   users: [ { name: 'Victor Igor' }, { name: 'Kant Jonas' } ],
-//   products: [] }
+// { products: [ { test: 0 } ], users: [ { name: 'Kant Jonas' } ] }
