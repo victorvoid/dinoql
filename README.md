@@ -208,6 +208,7 @@ console.log(users)
 ```
 
 #### Default value
+You can add default value to keys not found or values (null/undefined).
 
 ```js
 import dinoql from 'dinoql'
