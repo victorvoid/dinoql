@@ -302,5 +302,25 @@ describe('[dql] { keep: false }', () => {
 
     expect(value).toEqual(dataChanged);
   });
+
+  test('should works variables', () => {
+    const newData = {
+      users: [{ id: "200", name: 'Vic' }, { id: "300", name: 'Paul' }]
+    };
+
+    const variables = {
+      id: "200"
+    };
+
+    const value = dql(newData, { variables })`
+      users(id: $id)
+    `;
+
+    const dataExpected = {
+      users: [{ id: '200', name: 'Vic'}]
+    };
+
+    expect(value).toEqual(dataExpected);
+  });
 });
 

@@ -15,7 +15,7 @@ function dinoql(data, options = { keep: false }) {
       return memo[dataIndex];
     }
 
-    const ast = parser(query);
+    const ast = parser(query, options);
     const body = _.path(['definitions', 0], ast);
     const bodyName = _.ast.getName(body);
 

@@ -1,5 +1,5 @@
 fragment queryOne on Query {
-  users {
+  users(id: $id) {
     name
   }
 }
