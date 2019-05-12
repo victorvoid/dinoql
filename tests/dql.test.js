@@ -65,28 +65,6 @@ describe('[dql] { keep: false }', () => {
     expect(value).toEqual(dataFiltered)
   });
 
-  test('should return only values using defaultValue', () => {
-    const value = dql(data)` 
-      test { 
-        test2 { 
-          test3 { 
-            test4 { 
-               test5
-            },
-            notfound(defaultValue: 10)
-          },
-        }
-      }`;
-
-    const dataFiltered = {
-      test5: 10,
-      notfound: 10
-    };
-
-    expect(value).toEqual(dataFiltered)
-  });
-
-
   test('shouldn\'t get keys that value is undefined or null', () => {
     const value = dql(data)` 
       test { 

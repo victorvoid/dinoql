@@ -89,6 +89,45 @@ describe('[dql] resolvers', () => {
     });
   })
 
+  describe('[default value]', () => {
+    test('should return defaultValue when key does not found', () => {
+      const value = dql(data)` 
+      test { 
+        test2 { 
+          test3 { 
+            test4 { 
+               test5
+            },
+            notfound(defaultValue: 10)
+          },
+        }
+      }`;
+
+      const dataFiltered = {
+        test5: 10,
+        notfound: 10
+      };
+
+      expect(value).toEqual(dataFiltered)
+    });
+
+    test('should return defaultValue when value is null or undefined', () => {
+      const newdata = {
+        requests: {
+          hoy: null
+        }
+      };
+
+      const value = dql(newdata)`
+        requests {
+          hoy(defaultValue: 10)
+        }
+      `;
+
+      expect(value).toEqual({ hoy: 10 });
+    });
+  });
+
   describe('[Get only values from object]', () => {
     test('should get only values form object', () => {
       const value = dql(data)` 
