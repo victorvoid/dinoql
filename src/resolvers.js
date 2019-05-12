@@ -13,7 +13,7 @@ function orderBy(list = [], prop) {
  * @param {string} argName - The key from object
  * @param {array} data - The array to filter
  * @param {string} value - The value to use for filter
- * @returns {array} Returns data filtered according to the prop
+ * @returns {*} Returns data filtered according to the prop
  */
 const filterKey = (argName, customResolvers) => (data, value) => {
   const fnCustomResolver = _.prop(argName, customResolvers);
@@ -61,28 +61,22 @@ const toNumber = (value) => {
 
 /**
  * @param {*} value - A value to parse.
- * @returns {*} Returns object parsed to array.
+ * @returns {array} Returns object parsed to array.
  */
-const toArray = (value) => {
-  const toIndividualKeys = _.pipe(
-    _.toPairs,
-    _.map(_.pipe(_.of, _.fromPairs))
-  );
-
-  return toIndividualKeys(value);
-};
+const toArray = _.pipe(
+  _.toPairs,
+  _.map(_.pipe(_.of, _.fromPairs))
+);
 
 /**
  * @param {*} value - A value to parse.
  * @returns {array} Returns only values from object.
  */
-const getObjectValues = (value) => {
-  if(typeof(value) === 'object') {
-    return Object.values(value)
-  }
-
-  return value
-};
+const getObjectValues = _.ifElse(
+  _.is(Object),
+  Object.values,
+  _.identity
+);
 
 module.exports = {
   filterKey,

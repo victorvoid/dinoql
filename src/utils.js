@@ -4,10 +4,17 @@
  * @param {object} data - The object to change
  * @returns {object} Returns object with `oldProp` renamed to `newProp`
  */
-const renameProp = (oldProp, newProp, { [oldProp]: old, ...others }) => ({
-  [newProp]: old,
-  ...others,
-});
+const renameProp = (oldProp, newProp, data) => {
+  const { [oldProp]: old, ...others } = data;
+  if(!newProp) {
+    return data;
+  };
+
+  return ({
+    [newProp]: old,
+    ...others,
+  });
+}
 
 const R = {
   prop: require('ramda/src/prop'),
@@ -43,7 +50,18 @@ const R = {
 const ast = {
   getValue: R.path(['value', 'value']),
   getAlias: R.path(['alias', 'value']),
-  getName: R.path(['name', 'value'])
+  getName: R.path(['name', 'value']),
+  getAllNames: (ast) => {
+    const nodeAlias = R.path(['alias', 'value'], ast);
+    const oldNodeName = R.path(['name', 'value'], ast);
+    const nodeValue = R.path(['value', 'value'], ast);
+    return {
+      nodeValue,
+      nodeAlias,
+      oldNodeName,
+      nodeName: nodeAlias || oldNodeName
+    }
+  }
 };
 
 module.exports = {

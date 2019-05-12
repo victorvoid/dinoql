@@ -7,7 +7,7 @@ const fragments = require('./fragments');
  */
 function parser(code) {
   const query = _.prop(0, code);
-  if(typeof(query) !== 'string') {
+  if(!_.is(String, query)) {
     return fragments.mergeFragments(code)
   }
 

@@ -13,10 +13,14 @@ function Transform(options, customResolvers) {
   const getResolved = ({ data, nodeName }) => args => {
     const arr = _.prop(nodeName, data);
     const result = args.reduce((acc, arg) => {
-      const name = _.ast.getName(arg);
-      const value = _.ast.getValue(arg);
-      const resolver = _.propOr(resolvers.filterKey(name, customResolvers), name, resolvers);
-      return resolver(arr, value);
+      const { nodeValue: argValue, nodeName: argName } = _.ast.getAllNames(arg);
+      const resolver = _.propOr(
+        resolvers.filterKey(argName, customResolvers),
+        argName,
+        resolvers
+      );
+
+      return resolver(arr, argValue);
     }, arr);
 
     return _.assoc(nodeName, result, data)
@@ -28,7 +32,7 @@ function Transform(options, customResolvers) {
    * @param {object} obj.data - The object to query
    * @param {object} obj.ast - Abstract Syntax Tree
    */
-  let lastArrayFiltered = null
+  let lastArrayFiltered = null;
   const getItemsResolved = ({ data, ast, nodeName }) => {
     const lastObjToGet = _objToGet;
     _objToGet = {};
@@ -39,6 +43,7 @@ function Transform(options, customResolvers) {
         const itemFiltered = _.dissoc(nodeName, item);
         return acc.concat({ ...itemFiltered, ...value });
       }
+
       return acc;
     }, []);
 
@@ -68,22 +73,22 @@ function Transform(options, customResolvers) {
     lastArrayFiltered = null;
     return selections.reduce((acc, sel) => {
       const value = getQueryResolved(sel, lastArrayFiltered || filtered);
-      if(!_.equals(value, lastArrayFiltered)) {
-        lastArrayFiltered = null;
-      }
 
       if(options.keep) {
         return _.assoc(nodeName, value, acc)
       }
 
-      const name = _.ast.getAlias(sel) || _.ast.getName(sel);
+      const { nodeName: selName } = _.ast.getAllNames(sel);
+      const valueFromNode = _.prop(selName, value);
+
       if(Array.isArray(value) && value.length) {
         _objToGet[nodeName] = value
-      } else if(!sel.selectionSet) {
-        const valueFromNode = _.prop(name, value)
-        if(!_.isNil(valueFromNode)) {
-          _objToGet[name] = valueFromNode;
-        }
+      } else if(!sel.selectionSet && !_.isNil(valueFromNode)) {
+        _objToGet[selName] = valueFromNode;
+      }
+
+      if(!_.equals(value, lastArrayFiltered)) {
+        lastArrayFiltered = null;
       }
 
       return _objToGet;
@@ -96,27 +101,25 @@ function Transform(options, customResolvers) {
    * @returns {Function} Returns `data` filtered according to the query using recursion.
    */
   function getQueryResolved(ast, data = {}) {
-    const nodeAlias = _.ast.getAlias(ast);
-    const oldNodeName = _.ast.getName(ast);
-    const nodeName = nodeAlias || oldNodeName;
-    const dataWithAlias = nodeAlias ? _.renameProp(oldNodeName, nodeAlias, data) : data;
+    const { nodeAlias, oldNodeName, nodeName } = _.ast.getAllNames(ast);
     const selections = _.pathOr([], ['selectionSet', 'selections'], ast);
     const props = _.map(_.ast.getName, selections);
     const astArgs = _.propOr([], 'arguments', ast);
-    const dataResolved = _.ifElse(
+    const dataWithAlias = _.renameProp(oldNodeName, nodeAlias, data);
+    const dataResolversApplied = _.ifElse(
       _.isEmpty,
       _.always(dataWithAlias),
       getResolved({ data: dataWithAlias, nodeName })
     )(astArgs);
 
-    const nodeValue = _.prop(nodeName, dataResolved);
+    const nodeValue = _.prop(nodeName, dataResolversApplied);
 
-    if(Array.isArray(dataResolved)) {
-      return getItemsResolved({ nodeName, props, data: dataResolved, ast })
+    if(Array.isArray(dataResolversApplied)) {
+      return getItemsResolved({ nodeName, props, data: dataResolversApplied, ast })
     }
 
     return getChildreansResolved({
-      data: dataResolved,
+      data: dataResolversApplied,
       selections,
       nodeValue,
       nodeName,

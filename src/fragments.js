@@ -6,7 +6,7 @@ function mergeFragments(ast) {
  let editedAst = null;
  visit(ast, {
   FragmentSpread(node, key, parent, ancestor){
-   const nodeName = _.ast.getName(node) || _.ast.getAlias(node);
+   const { nodeName } = _.ast.getAllNames(node);
    const fragment = _.find(_.pathEq(['name', 'value'], nodeName), definitions);
    const selections = _.path(['selectionSet', 'selections'], fragment);
    const pathInit = _.init(ancestor);
@@ -22,4 +22,4 @@ function mergeFragments(ast) {
 
 module.exports = {
  mergeFragments
-}
+};
