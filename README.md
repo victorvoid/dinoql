@@ -48,7 +48,7 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 
 ## Documentation
 
-All examples are using it data:
+All examples are using this data:
 
 ```js
 const data = {
