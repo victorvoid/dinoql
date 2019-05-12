@@ -51,7 +51,7 @@ const ast = {
   getValue: R.path(['value', 'value']),
   getAlias: R.path(['alias', 'value']),
   getName: R.path(['name', 'value']),
-  getAllNames: (ast) => {
+  getAllProps: (ast) => {
     const nodeAlias = R.path(['alias', 'value'], ast);
     const oldNodeName = R.path(['name', 'value'], ast);
     const nodeValue = R.path(['value', 'value'], ast);

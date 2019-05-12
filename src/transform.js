@@ -13,7 +13,7 @@ function Transform(options, customResolvers) {
   const getResolved = ({ data, nodeName }) => args => {
     const arr = _.prop(nodeName, data);
     const result = args.reduce((acc, arg) => {
-      const { nodeValue: argValue, nodeName: argName } = _.ast.getAllNames(arg);
+      const { nodeValue: argValue, nodeName: argName } = _.ast.getAllProps(arg);
       const resolver = _.propOr(
         resolvers.filterKey(argName, customResolvers),
         argName,
@@ -78,7 +78,7 @@ function Transform(options, customResolvers) {
         return _.assoc(nodeName, value, acc)
       }
 
-      const { nodeName: selName } = _.ast.getAllNames(sel);
+      const { nodeName: selName } = _.ast.getAllProps(sel);
       const valueFromNode = _.prop(selName, value);
 
       if(Array.isArray(value) && value.length) {
@@ -101,7 +101,7 @@ function Transform(options, customResolvers) {
    * @returns {Function} Returns `data` filtered according to the query using recursion.
    */
   function getQueryResolved(ast, data = {}) {
-    const { nodeAlias, oldNodeName, nodeName } = _.ast.getAllNames(ast);
+    const { nodeAlias, oldNodeName, nodeName } = _.ast.getAllProps(ast);
     const selections = _.pathOr([], ['selectionSet', 'selections'], ast);
     const props = _.map(_.ast.getName, selections);
     const astArgs = _.propOr([], 'arguments', ast);
