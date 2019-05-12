@@ -18,6 +18,8 @@ A customizable GraphQL style query language for interacting with JavaScript obje
     - [Order by](#order-by)
     - [Default value](#default-value)
     - [Parse to Number](#parse-to-number)
+    - [Get object values](#get-object-values)
+    - [Parse to array](#parse-to-array)
     - [First](#first)
     - [Last](#last)
   - [Building your own resolver](#building-your-own-resolver)
@@ -235,6 +237,52 @@ const users = dinoql(data)`
 `
 
 console.log(users)  //{ users: [{ id: 100 }, { id: 200 }] }
+```
+
+#### Get object values
+
+```js
+import dinoql from 'dinoql'
+
+const data = {
+  requests: {
+    user: {
+      name: 'vic',
+      age: 10
+    }
+  }
+}
+const gql = dinoql(data)`
+  requests {
+    user(getObjectValues: true)
+  }
+`
+
+console.log(gql) //['vic', 10]
+```
+
+#### Parse to array
+
+
+```js
+import dinoql from 'dinoql'
+
+const data = {
+  requests {
+    fields: {
+      field1: 'name',
+      field2: 'age'
+    }
+  }
+}
+
+const users = dinoql(data)`
+  requests {
+    fields(toArray: true)
+  }
+`
+
+console.log(users)  //[{ field1: 'name' }, { field2: 'age' }]
 ```
 
 #### First
