@@ -13,6 +13,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
   - [Get user by id](#get-user-by-id)
   - [Aliases - Renaming keys](#aliases---renaming-keys)
   - [Variables](#variables)
+  - [Conditions to get fields](#conditions-to-get-fields)
   - [Resolvers](#resolvers)
     - [Order by](#order-by)
     - [Default value](#default-value)
@@ -154,6 +155,32 @@ const gql = dinoql(data, { variables })`
 // { users: [{ name: 'Victor Igor' }] }
 ```
 
+### Conditions to get fields
+
+You can create conditions to get a field.
+
+```js
+const data = {
+  dashboard {
+    value: '#54'	
+  },
+  
+  name: 'Vic'
+};
+
+const variables = {
+  cond: false
+};
+
+const gql = dql(data, { variables })` 
+  dashboard(if: $cond) {
+    value
+  },
+  name
+}`;
+
+//{ name: 'Vic' }
+```
 
 ### Resolvers
 
