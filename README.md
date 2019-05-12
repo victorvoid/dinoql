@@ -12,6 +12,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
   - [Getting only name from users](#getting-only-name-from-users)
   - [Get user by id](#get-user-by-id)
   - [Aliases - Renaming keys](#aliases---renaming-keys)
+  - [Variables](#variables)
   - [Resolvers](#resolvers)
     - [Order by](#order-by)
     - [Default value](#default-value)
@@ -41,6 +42,7 @@ The main objective is to use the same idea of [GraphQL](https://graphql.org/), h
 - 🌟 Many [resolvers](#resolvers) implemented by default.
 - 🐣 [Build your own resolver](#building-your-own-resolver).
 - 💥 [Fragments support](#fragments-support-)(share piece of query logic).
+- 👂 [Variables support](#variables)(dynamic queries).
 - 🏄 Parse your queries in build time. ([Example](https://github.com/victorvoid/dinoql/tree/master/examples/webpack))
 - 🎒 [Filter values according to the value](#get-user-by-id).
 - 💾 Caching support
@@ -121,6 +123,37 @@ const users = dinoql(data)`
 
 console.log(users) //{ changeUsers: [{ name: 'Kant Jonas' }] }
 ```
+
+### Variables
+
+Build dynamic queries with variables.
+
+```js
+const data = {
+  users: [{
+    name: 'Victor Igor',
+    id: "100",
+    age: 18
+  }, {
+    name: 'Paul Gilbert',
+    id: "200",
+    age: 35
+  }],	
+};
+
+const variables = {
+  id: "100"
+};
+
+const gql = dinoql(data, { variables })`
+  users(id: $id) {
+    name
+  }
+`
+
+// { users: [{ name: 'Victor Igor' }] }
+```
+
 
 ### Resolvers
 
