@@ -44,7 +44,7 @@ function Transform(options, customResolvers) {
         return acc.concat({ ...itemFiltered, ...value });
       }
 
-      return acc;
+      return acc.concat(item);
     }, []);
 
     _objToGet = lastObjToGet;
