@@ -90,7 +90,7 @@ describe('[dql] { keep: false }', () => {
         testdsjj 
       }`;
 
-    expect(value).toEqual({})
+    expect(value).toEqual({ data: [{}] })
   });
 
   test('should get error when resolver does not exist', () => {
