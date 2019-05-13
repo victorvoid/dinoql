@@ -16,6 +16,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
   - [Conditions to get fields](#conditions-to-get-fields)
   - [Resolvers](#resolvers)
     - [Order by](#order-by)
+    - [Merge](#merge)
     - [Default value](#default-value)
     - [Parse to Number](#parse-to-number)
     - [Get object values](#get-object-values)
@@ -207,6 +208,61 @@ console.log(users)
 //{ users: [{ name: 'Kant Jonas', age: 35 }, { name: 'Victor Igor', age: 40 }] }
 ```
 
+#### Merge
+
+You can merge array or objects.
+
+##### Array
+```js
+import dinoql from 'dinoql'
+const data = {
+  requests: {
+    users: [{ id: 10, age: 10 }]
+  }
+}
+
+const variables = { 
+  user: { id: 15, age: 40 }
+}
+
+const users = dinoql(data, { variables })`
+  requests {
+    users(merge: $user) {
+      age
+    }
+  }
+`
+
+console.log(users) 
+
+//{ users: [{ age: 10 }, { age: 40 }] }
+```
+
+##### Object
+
+```js
+import dinoql from 'dinoql'
+const data = {
+  requests: {
+    user: { id: 10, name: 'Victor Igor' }
+  }
+}
+
+const variables = { 
+  user: { age: 40 }
+}
+
+const user = dinoql(data, { variables })`
+  requests {
+    user(merge: $user)
+  }
+`
+
+console.log(user) 
+
+//{ user: { id: 10, name: 'Victor Igor', age: 10 } }
+```
+
 #### Default value
 You can add default value to keys not found or values (null/undefined).
 
@@ -269,7 +325,7 @@ console.log(gql) //['vic', 10]
 import dinoql from 'dinoql'
 
 const data = {
-  requests {
+  requests: {
     fields: {
       field1: 'name',
       field2: 'age'

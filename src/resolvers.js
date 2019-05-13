@@ -78,6 +78,11 @@ const getObjectValues = _.ifElse(
   _.identity
 );
 
+/**
+ * @param {*} value - A value to parse.
+ * @param {*} right - A condition.
+ * @returns {*} Returns value if condition is true.
+ */
 const condIf = (value, right) => {
   try {
     const cond = JSON.parse(right);
@@ -85,6 +90,23 @@ const condIf = (value, right) => {
   } catch(e) {
     throw new Error('Resolver \'if\' needs to receive a boolean type.');
   }
+};
+
+/**
+ * @param {*} value - A value to parse.
+ * @param {*} right - A condition.
+ * @returns {*} Returns value if condition is true.
+ */
+const merge = (value, right) => {
+  if(Array.isArray(value) && Array.isArray(right)) {
+    return [...value, ...right];
+  }
+
+  if(_.is(Object, value) && _.is(Object, right)) {
+    return { ...value, ...right };
+  }
+
+  return value;
 };
 
 module.exports = {
@@ -96,5 +118,6 @@ module.exports = {
   defaultValue,
   toArray,
   getObjectValues,
+  merge,
   if: condIf
 };

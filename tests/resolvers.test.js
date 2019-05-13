@@ -219,5 +219,47 @@ describe('[dql] resolvers', () => {
       expect(value).toEqual({});
     });
   })
+
+  describe('[merge]', () => {
+    test('should merge two objects', () => {
+      const newdata = {
+        requests: {
+          user: { name: 'vic' }
+        }
+      };
+
+      const variables = {
+        newUser: { age: 10 }
+      };
+
+      const value = dql(newdata, { variables })` 
+        requests {
+          user(merge: $newUser)
+        }
+      `;
+
+      expect(value).toEqual({ user: { name: 'vic', age: 10 }})
+    });
+
+    test('should merge two arrays', () => {
+      const newdata = {
+        requests: {
+          users: [{ id: 10 }, { id: 12 }]
+        }
+      };
+
+      const variables = {
+        newUser: [{ id: 20}]
+      };
+
+      const value = dql(newdata, { variables })` 
+        requests {
+          users(id: 10, merge: $newUser)
+        }
+      `;
+
+      expect(value).toEqual({ users: [{ id: 10 }, { id: 20 }] })
+    });
+  });
 });
 

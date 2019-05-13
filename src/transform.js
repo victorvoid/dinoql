@@ -20,7 +20,7 @@ function Transform(options, customResolvers) {
         resolvers
       );
 
-      return resolver(arr, argValue);
+      return resolver(acc, argValue);
     }, arr);
 
     return _.assoc(nodeName, result, data)
