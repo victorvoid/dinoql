@@ -1,5 +1,7 @@
 # dinoql
+
 [![Build Status](https://travis-ci.org/victorvoid/dinoql.svg?branch=master)](https://travis-ci.org/victorvoid/dinoql)
+[![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
 
 A customizable GraphQL style query language for interacting with JavaScript objects. Use dinoql to traverse JavaScript objects the same way you query APIs with GraphQL. 
 
