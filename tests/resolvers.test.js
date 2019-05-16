@@ -148,6 +148,34 @@ describe('[dql] resolvers', () => {
 
       expect(value).toEqual(dataParsed);
     });
+
+    test('should work with multiples getObjectValue', () => {
+      const newdata = {
+        data: {
+          item1: { name: 'Vic', age: 10, users: { name1: { fill: true, active: false }, name2: { fill: false }}},
+          item2: { name: 'Jao', age: 12},
+          item3: { name: 'Mar', age: 14},
+        }
+      };
+
+      const value = dql(newdata)` 
+        data(getObjectValues: true)  {
+          name,
+          users(getObjectValues: true) {
+            fill
+          }
+        }`;
+
+      const dataParsed = {
+        data: [
+          { name: 'Vic', users:[{ fill: true }, { fill: false}]},
+          { name: 'Jao'},
+          { name: 'Mar'},
+        ]
+      };
+
+      expect(value).toEqual(dataParsed);
+    });
   })
 
   describe('[Condition resolvers]', () => {

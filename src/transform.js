@@ -19,9 +19,12 @@ function Transform(options, customResolvers) {
         argName,
         resolvers
       );
-
       return resolver(acc, argValue);
     }, arr);
+
+    if(Array.isArray(data)) {
+      return data.map(obj => getResolved({ data: obj, nodeName })(args));
+    }
 
     return _.assoc(nodeName, result, data)
   };

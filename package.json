@@ -1,6 +1,6 @@
 {
   "name": "dinoql",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "A query language for JavaScript Objects using GraphQL syntax.",
   "main": "dist/dinoql.min.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/victorvoid/dinoql.git"
   },
-  "author": "",
+  "author": "Victor Igor<victor.0w3@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/victorvoid/dinoql/issues"
