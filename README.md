@@ -167,7 +167,7 @@ You can create conditions to get a field.
 
 ```js
 const data = {
-  dashboard {
+  dashboard: {
     value: '#54'	
   },
   
@@ -184,8 +184,15 @@ const gql = dql(data, { variables })`
   },
   name
 }`;
-
 //{ name: 'Vic' }
+
+const otherGql = dql(data, { variables })` 
+  dashboard(unless: $cond) {
+    value
+  },
+  name
+}`;
+//{ name: 'Vic', value: '#54' }
 ```
 
 ### Resolvers
