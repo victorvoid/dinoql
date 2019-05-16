@@ -95,6 +95,20 @@ const condIf = (value, right) => {
 /**
  * @param {*} value - A value to parse.
  * @param {*} right - A condition.
+ * @returns {*} Returns value if condition is false.
+ */
+const unless = (value, right) => {
+  try {
+    const cond = JSON.parse(right);
+    return !cond ? value : null ;
+  } catch(e) {
+    throw new Error('Resolver \'if\' needs to receive a boolean type.');
+  }
+};
+
+/**
+ * @param {*} value - A value to parse.
+ * @param {*} right - A condition.
  * @returns {*} Returns value if condition is true.
  */
 const merge = (value, right) => {
@@ -119,5 +133,6 @@ module.exports = {
   toArray,
   getObjectValues,
   merge,
-  if: condIf
+  unless,
+  if: condIf,
 };

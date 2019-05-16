@@ -246,6 +246,21 @@ describe('[dql] resolvers', () => {
 
       expect(value).toEqual({});
     });
+
+    test('should get fields only if condition is false', () => {
+      const value = dql(data)` 
+        test { 
+          test2 { 
+            test3 {
+              test4(unless: false) {
+                test5
+              }
+            }
+          }
+        }`;
+
+      expect(value).toEqual({ test5: 10 });
+    });
   })
 
   describe('[merge]', () => {
