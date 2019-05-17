@@ -152,7 +152,7 @@ describe('[dql] resolvers', () => {
     test('should work with multiples getObjectValue', () => {
       const newdata = {
         data: {
-          item1: { name: 'Vic', age: 10, users: { name1: { fill: true, active: false }, name2: { fill: false }}},
+          item1: { name: 'Vic', age: 10, users: { name1: { fill: '10', active: false }, name2: { fill: '20' }}},
           item2: { name: 'Jao', age: 12},
           item3: { name: 'Mar', age: 14},
         }
@@ -162,13 +162,13 @@ describe('[dql] resolvers', () => {
         data(getObjectValues: true)  {
           name,
           users(getObjectValues: true) {
-            fill
+            fill(toNumber: true)
           }
         }`;
 
       const dataParsed = {
         data: [
-          { name: 'Vic', users:[{ fill: true }, { fill: false}]},
+          { name: 'Vic', users:[{ fill: 10 }, { fill: 20}]},
           { name: 'Jao'},
           { name: 'Mar'},
         ]

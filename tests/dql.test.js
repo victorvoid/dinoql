@@ -232,11 +232,11 @@ describe('[dql] { keep: false }', () => {
             text,
             html(getObjectValues: true) {
               title {
-                title: text
+                title: text(toNumber: true)
               },
               
               age {
-                age: text
+                age: text(toNumber: true)
               }
             }
           }
@@ -248,7 +248,7 @@ describe('[dql] { keep: false }', () => {
       users: [{
         name: 'Kant Jonas',
         text: 'he',
-        html: [{ title: 'jose', age: '30' }, { title: 'icon', age: '20' }] }]
+        html: [{ title: 'jose', age: 30 }, { title: 'icon', age: 20 }] }]
     };
 
     expect(value).toEqual(dataFiltered);
