@@ -373,6 +373,24 @@ describe('[dql] resolvers', () => {
         ]
       });
     });
+
+    test('should return a void obj {}', () => {
+      const newData = {
+        requests: {
+          cms: {
+            footer_data: {
+              media: []
+            }
+          }
+        }
+      };
+
+      const socialMedia = dql(newData)`
+        requests(getPath: "cms.footer_data.social_networks")
+      `
+
+      expect(socialMedia).toEqual({});
+    });
   });
 
 });
