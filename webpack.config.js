@@ -18,8 +18,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-object-rest-spread']
+            presets: ['@babel/preset-env', 'flow'],
+            plugins: ['@babel/plugin-proposal-object-rest-spread', 'babel-plugin-transform-flow-strip-types']
           }
         },
       }
