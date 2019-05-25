@@ -123,16 +123,35 @@ const merge = (value, right) => {
   return value;
 };
 
+/**
+ * @param {*} obj - The object to search.
+ * @param {*} right - A prop.
+ * @returns {*} returns the value of the passed prop right inside obj.
+ */
+const getProp = (obj, right) => _.prop(right, obj);
+
+/**
+ * @param {*} value - the object to search.
+ * @param {*} right - A path.
+ * @returns {*} returns the value of the passed path right inside obj.
+ */
+const getPath = (obj, right) => {
+	const path = right.split('.');
+	return _.path(path, obj);
+};
+
 module.exports = {
-  filterKey,
-  orderBy,
-  first,
   last,
-  toNumber,
-  defaultValue,
-  toArray,
-  getObjectValues,
+  first,
   merge,
   unless,
+  orderBy,
+  toArray,
+  getProp,
+  getPath,
+  toNumber,
+  filterKey,
   if: condIf,
+  defaultValue,
+  getObjectValues
 };
