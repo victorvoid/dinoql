@@ -306,7 +306,7 @@ describe('[dql] resolvers', () => {
   });
 
   describe('[getProp]', () => {
-    test('should return the obj { users: 10, title: "my title", description: "my description" }', () => {
+    test('should return the obj with various data', () => {
       const newData = {
         requests: {
           users: { id: 10, name: 'Victor Fellype' },
@@ -330,7 +330,7 @@ describe('[dql] resolvers', () => {
       expect(data).toEqual({ users: 10, title: 'my title', description: 'my description' });
     });
 
-    test('should return a undefined', () => {
+    test('should return a void obj {}', () => {
       const newData = {
         requests: {
           users: { name: 'Victor Fellype' },
@@ -348,7 +348,7 @@ describe('[dql] resolvers', () => {
   });
 
   describe('[getPath]', () => {
-    test('should return ', () => {
+    test('should return a obj with one array and multiples objs', () => {
       const newData = {
         requests: {
           cms: {
