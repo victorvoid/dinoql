@@ -319,7 +319,7 @@ describe('[dql] resolvers', () => {
 
       const data = dql(newData)`
         requests {
-          users(getProp: id)
+          users(getProp: name)
           information {
             title(getProp: text)
             description(getProp: text)
@@ -327,7 +327,7 @@ describe('[dql] resolvers', () => {
         }
       `
 
-      expect(data).toEqual({ users: 10, title: 'my title', description: 'my description' });
+      expect(data).toEqual({ users: 'Victor Fellype', title: 'my title', description: 'my description' });
     });
 
     test('should return a void obj {}', () => {
