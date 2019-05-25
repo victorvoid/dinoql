@@ -304,5 +304,48 @@ describe('[dql] resolvers', () => {
       expect(value).toEqual({ users: [{ id: 10 }, { id: 20 }] })
     });
   });
+
+  describe('[getProp]', () => {
+    test('should return the obj { users: 10, title: "my title", description: "my description" }', () => {
+      const newData = {
+        requests: {
+          users: { id: 10, name: 'Victor Fellype' },
+          information: { 
+            title: { text: 'my title' }, 
+            description: { text: 'my description' } 
+          }
+        }
+      };
+
+      const data = dql(newData)`
+        requests {
+          users(getProp: id)
+          information {
+            title(getProp: text)
+            description(getProp: text)
+          }
+        }
+      `
+
+      expect(data).toEqual({ users: 10, title: 'my title', description: 'my description' });
+    });
+
+    test('should return a undefined', () => {
+      const newData = {
+        requests: {
+          users: { name: 'Victor Fellype' },
+        }
+      };
+
+      const value = dql(newData)`
+        requests {
+          users(getProp: id)
+        }
+      `
+
+      expect(value).toEqual({});
+    });
+  });
+
 });
 
