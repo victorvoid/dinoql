@@ -25,6 +25,9 @@ A customizable GraphQL style query language for interacting with JavaScript obje
     - [Parse to array](#parse-to-array)
     - [First](#first)
     - [Last](#last)
+    - [Get Prop](#get-prop)
+    - [get Path](#get-path)
+    
   - [Building your own resolver](#building-your-own-resolver)
   - [Custom options](#custom-options)
     - [Keep structure](#keep-structure)
@@ -382,6 +385,110 @@ const users = dinoql(data)`
 `
 
 console.log(users)  //{ users: { name: 'Kant Jonas' } }
+```
+
+### Get Prop
+
+```js
+import dinoql from 'dinoql'
+
+const newData = {
+  requests: {
+    users: { id: 10, name: 'Victor Fellype' },
+    information: { 
+      title: { text: 'my title' }, 
+      description: { text: 'my description' } 
+    }
+  }
+};
+```
+
+old method 
+
+```js
+const data = dinoql(newData)`
+  requests {
+    users {
+      name
+    }
+    information {
+      title {
+        title: text
+      }
+      description {
+        description: text
+      }
+    }
+  }
+`
+```
+
+with getProp
+
+```js
+const data = dinoql(newData)`
+  requests {
+    users(getProp: name)
+    information {
+      title(getProp: text)
+      description(getProp: text)
+    }
+  }
+`
+
+console.log(data) // { users: 'Victor Fellype', title: 'my title', description: 'my description' }
+```
+
+
+### Get Path
+
+```js
+import dinoql from 'dinoql'
+
+const newData = {
+  requests: {
+    cms: {
+      footer_data: {
+        social_networks: [
+          { name: 'facebook', url: 'facebook.com' },
+          { name: 'instagram', url: 'instagram.com' }
+        ]
+      }
+    }
+  }
+};
+```
+
+old method 
+
+```js
+const data = dinoql(newData)`
+  requests {
+    cms {
+      footer_data {
+        social_networks
+      }
+    }
+  }
+`
+```
+
+with getPath
+
+```js
+const socialNetworks = dinoql(newData)`
+  requests(getPath: "cms.footer_data.social_networks")
+`
+
+console.log(socialNetworks) 
+/* 
+  { 
+    requests: [ 
+      { name: 'facebook', url: 'facebook.com' }, 
+      { name: 'instagram', url: 'instagram.com' }
+    ]
+  }
+*/
 ```
 
 ### Building your own resolver
