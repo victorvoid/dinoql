@@ -347,5 +347,33 @@ describe('[dql] resolvers', () => {
     });
   });
 
+  describe('[getPath]', () => {
+    test('should return ', () => {
+      const newData = {
+        requests: {
+          cms: {
+            footer_data: {
+              social_networks: [
+                { name: 'facebook', url: 'facebook.com' },
+                { name: 'instagram', url: 'instagram.com' }
+              ]
+            }
+          }
+        }
+      };
+
+      const socialNetworks = dql(newData)`
+        requests(getPath: "cms.footer_data.social_networks")
+      `
+
+      expect(socialNetworks).toEqual({
+        requests: [
+          { name: 'facebook', url: 'facebook.com' },
+          { name: 'instagram', url: 'instagram.com' }
+        ]
+      });
+    });
+  });
+
 });
 
