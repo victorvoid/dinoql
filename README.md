@@ -26,7 +26,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
     - [First](#first)
     - [Last](#last)
     - [Get Prop](#get-prop)
-    - [get Path](#get-path)
+    - [Get Path](#get-path)
     
   - [Building your own resolver](#building-your-own-resolver)
   - [Custom options](#custom-options)
