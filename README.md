@@ -273,7 +273,7 @@ const user = dinoql(data, { variables })`
 
 console.log(user) 
 
-//{ user: { id: 10, name: 'Victor Igor', age: 10 } }
+//{ user: { id: 10, name: 'Victor Igor', age: 40 } }
 ```
 
 #### Default value
@@ -387,7 +387,7 @@ const users = dinoql(data)`
 console.log(users)  //{ users: { name: 'Kant Jonas' } }
 ```
 
-### Get Prop
+#### Get Prop
 
 ```js
 import dinoql from 'dinoql'
@@ -403,7 +403,7 @@ const newData = {
 };
 ```
 
-old method 
+without getProp
 
 ```js
 const data = dinoql(newData)`
@@ -440,7 +440,7 @@ console.log(data) // { users: 'Victor Fellype', title: 'my title', description: 
 ```
 
 
-### Get Path
+#### Get Path
 
 ```js
 import dinoql from 'dinoql'
@@ -459,7 +459,7 @@ const newData = {
 };
 ```
 
-old method 
+without getPath 
 
 ```js
 const data = dinoql(newData)`
