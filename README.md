@@ -232,14 +232,15 @@ You can use `(keep: true)` in key, like:
 ```js
 import dinoql from 'dinoql'
 
+//keeping user key
 const user = dinoql(data)`
   requests {
     user(keep: true) {
-       name(keep: true){
-         text
+       name {
+         name: text
        },
-       description(keep: true){
-         text
+       description {
+         description: text
        }
     }
   }

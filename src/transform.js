@@ -91,9 +91,7 @@ function Transform(options, customResolvers) {
       if(Array.isArray(value) && value.length) {
         _objToGet[nodeName] = value
       } else if(shouldKeep && _.is(Object, valueFromNode)) {
-        _objToGet = { [selName] : valueFromNode };
-        shouldKeep = false
-        return _objToGet
+        _objToGet = { [selName]: valueFromNode };
       } else if(!sel.selectionSet && !_.isNil(valueFromNode)) {
         _objToGet[selName] = valueFromNode;
       }

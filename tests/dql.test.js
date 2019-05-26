@@ -334,5 +334,45 @@ describe('[dql] { keep: false }', () => {
 
     expect(value).toEqual({ users: { html: { text: 'hello' }}});
   });
+
+  // test('should works keep specific structure (all keys)', () => {
+  //   const newdata = {
+  //     requests: {
+  //       user: {
+  //         name: {
+  //           text: { _html: { h1: 'Dinoql' } }
+  //         },
+  //
+  //         description: {
+  //           text: { _html: { p: 'I am dinoql.' } }
+  //         }
+  //       }
+  //     }
+  //   }
+  //
+  //   const value = dql(newdata)`
+  //     requests {
+  //       user(keep: true) {
+  //         name(keep: true) {
+  //           text {
+  //             _html(keep: true) {
+  //               h1
+  //             }
+  //           }
+  //         }
+  //         description(keep: true) {
+  //           text {
+  //             _html(keep: true) {
+  //               p
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `;
+  //
+  //   console.log(JSON.stringify(value))
+  //   expect(value).toEqual({ user: { name: 'Dinoql', description: 'I am dinoql.'}});
+  // });
 });
 
