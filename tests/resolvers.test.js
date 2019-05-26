@@ -304,5 +304,94 @@ describe('[dql] resolvers', () => {
       expect(value).toEqual({ users: [{ id: 10 }, { id: 20 }] })
     });
   });
+
+  describe('[getProp]', () => {
+    test('should return the obj with various data', () => {
+      const newData = {
+        requests: {
+          users: { id: 10, name: 'Victor Fellype' },
+          information: { 
+            title: { text: 'my title' }, 
+            description: { text: 'my description' } 
+          }
+        }
+      };
+
+      const data = dql(newData)`
+        requests {
+          users(getProp: name)
+          information {
+            title(getProp: text)
+            description(getProp: text)
+          }
+        }
+      `
+
+      expect(data).toEqual({ users: 'Victor Fellype', title: 'my title', description: 'my description' });
+    });
+
+    test('should return a void obj {}', () => {
+      const newData = {
+        requests: {
+          users: { name: 'Victor Fellype' },
+        }
+      };
+
+      const value = dql(newData)`
+        requests {
+          users(getProp: id)
+        }
+      `
+
+      expect(value).toEqual({});
+    });
+  });
+
+  describe('[getPath]', () => {
+    test('should return a obj with one array and multiples objs', () => {
+      const newData = {
+        requests: {
+          cms: {
+            footer_data: {
+              social_networks: [
+                { name: 'facebook', url: 'facebook.com' },
+                { name: 'instagram', url: 'instagram.com' }
+              ]
+            }
+          }
+        }
+      };
+
+      const socialNetworks = dql(newData)`
+        requests(getPath: "cms.footer_data.social_networks")
+      `
+
+      expect(socialNetworks).toEqual({
+        requests: [
+          { name: 'facebook', url: 'facebook.com' },
+          { name: 'instagram', url: 'instagram.com' }
+        ]
+      });
+    });
+
+    test('should return a void obj {}', () => {
+      const newData = {
+        requests: {
+          cms: {
+            footer_data: {
+              media: []
+            }
+          }
+        }
+      };
+
+      const socialMedia = dql(newData)`
+        requests(getPath: "cms.footer_data.social_networks")
+      `
+
+      expect(socialMedia).toEqual({});
+    });
+  });
+
 });
 
