@@ -65,7 +65,10 @@ function Transform(options, customResolvers) {
    * @param {*} obj.nodeValue - The value from `obj.data` according to the `obj.nodeName`
    * @returns {Function} Returns `obj.data` filtered according to the `obj.selections`
    */
-  const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props }) => {
+
+  let shouldKeep = false;
+  const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props, hasKeep }) => {
+
     const getFiltered = _.cond([
       [Array.isArray, _.project(props)],
       [_.is(Object), _.pick(props)],
@@ -77,8 +80,9 @@ function Transform(options, customResolvers) {
     return selections.reduce((acc, sel) => {
       const value = getQueryResolved(sel, lastArrayFiltered || filtered);
 
-      if(options.keep) {
-        return _.assoc(nodeName, value, acc)
+      if(options.keep || hasKeep) {
+        shouldKeep = true;
+        return _.assoc(nodeName, value, acc);
       }
 
       const { nodeName: selName } = _.ast.getAllProps(sel);
@@ -86,6 +90,10 @@ function Transform(options, customResolvers) {
 
       if(Array.isArray(value) && value.length) {
         _objToGet[nodeName] = value
+      } else if(shouldKeep && _.is(Object, valueFromNode)) {
+        _objToGet = { [selName] : valueFromNode };
+        shouldKeep = false
+        return _objToGet
       } else if(!sel.selectionSet && !_.isNil(valueFromNode)) {
         _objToGet[selName] = valueFromNode;
       }
@@ -109,6 +117,7 @@ function Transform(options, customResolvers) {
     const props = _.map(_.ast.getName, selections);
     const astArgs = _.propOr([], 'arguments', ast);
     const dataWithAlias = _.renameProp(oldNodeName, nodeAlias, data);
+    const hasKeep = _.find(node => _.ast.getName(node) === 'keep', astArgs);
     const dataResolversApplied = _.ifElse(
       _.isEmpty,
       _.always(dataWithAlias),
@@ -127,6 +136,7 @@ function Transform(options, customResolvers) {
       nodeValue,
       nodeName,
       props,
+      hasKeep
     })
   }
 

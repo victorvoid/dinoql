@@ -153,5 +153,6 @@ module.exports = {
   filterKey,
   if: condIf,
   defaultValue,
-  getObjectValues
+  getObjectValues,
+  keep: _.identity
 };

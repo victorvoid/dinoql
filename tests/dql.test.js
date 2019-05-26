@@ -300,5 +300,39 @@ describe('[dql] { keep: false }', () => {
 
     expect(value).toEqual(dataExpected);
   });
+
+  test('should works keep specific structure', () => {
+    const newdata = {
+      data: {
+        users: {
+          name: 'Victor Igor',
+          id: "100",
+          age: 40,
+          test: {
+            text: true,
+            html: {
+              _data: { text: 'hello', age: 10 }
+            }
+          }
+        }
+      }
+    };
+
+    const value = dql(newdata)`
+      data {
+        users(keep: true) {
+          test {
+            html(keep: true) {
+              _data {
+                text
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    expect(value).toEqual({ users: { html: { text: 'hello' }}});
+  });
 });
 

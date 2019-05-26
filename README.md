@@ -16,6 +16,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
   - [Aliases - Renaming keys](#aliases---renaming-keys)
   - [Variables](#variables)
   - [Conditions to get fields](#conditions-to-get-fields)
+  - [Keep key from object](#keep-key-from-object)
   - [Resolvers](#resolvers)
     - [Order by](#order-by)
     - [Merge](#merge)
@@ -196,6 +197,54 @@ const otherGql = dql(data, { variables })`
   name
 }`;
 //{ name: 'Vic', value: '#54' }
+```
+
+### Keep key from object
+
+Sometimes, we need to keep specific keys.
+
+```js
+
+const data = {
+  requests: {
+    user: {
+      name: {
+        text: 'Dinoql'
+      },
+      
+      description: {
+        text: 'I am dinoql.'
+      }
+    }
+  }
+}
+
+```
+
+If you wanna keep some keys, like:
+
+```js
+//{ user: { name: 'Dinoql', description: 'I am dinoql.'} }
+```
+
+You can use `(keep: true)` in key, like:
+
+```js
+import dinoql from 'dinoql'
+
+const user = dinoql(data)`
+  requests {
+    user(keep: true) {
+       name(keep: true){
+         text
+       },
+       description(keep: true){
+         text
+       }
+    }
+  }
+`
+//{ user: { name: 'Dinoql', description: 'I am dinoql.'} }
 ```
 
 ### Resolvers
