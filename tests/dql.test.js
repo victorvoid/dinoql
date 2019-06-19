@@ -335,6 +335,14 @@ describe('[dql] { keep: false }', () => {
     expect(value).toEqual({ users: { html: { text: 'hello' }}});
   });
 
+  test('should works in data array', () => {
+    const newdata = [{ id: 100, name: 'test1' }, { id: 200, name: 'test2' }]
+
+    const value = dql(newdata)`id`;
+
+    expect(value).toEqual([{ id: 100 }, { id: 200 }]);
+  });
+
   // test('should works keep specific structure (all keys)', () => {
   //   const newdata = {
   //     requests: {

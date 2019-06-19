@@ -23,7 +23,7 @@ function dinoql(data, options = { keep: false }) {
 
     const result = getQueryResolved(body, { [bodyName]: data });
 
-    if(options.keep) {
+    if(options.keep || Array.isArray(data)) {
       const keyName = _.prop(0, Object.keys(result));
       return _.prop(keyName, result);
     }
