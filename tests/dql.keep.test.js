@@ -170,5 +170,45 @@ describe('[dql] { keep: true }', () => {
 
     expect(value).toEqual(dataFiltered);
   });
+
+  test('should works to multiples children', () => {
+    const data = {
+      victor: {
+        age: 20,
+        names: [{
+          full: 'Victor Igor',
+          first: 'Victor'
+        }]
+      },
+
+      luan: {
+        age: 20
+      }
+    }
+
+    const dataFiltered = {
+      victor: {
+        names: [{ full: 'Victor Igor'}]
+      },
+
+      luan: {
+        age: 20
+      }
+    }
+
+    const value = dql(data, { keep: true })`
+      victor {
+        names {
+          full
+        }
+      }
+      
+      luan {
+        age
+      }
+    `
+
+    expect(value).toEqual(dataFiltered);
+  });
 });
 
