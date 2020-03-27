@@ -67,7 +67,7 @@ function Transform(options, customResolvers) {
    */
 
   let shouldKeep = false;
-  const getChildreansResolved = ({ nodeValue, nodeName, selections, data, props, hasKeep }) => {
+  const getChildrensResolved = ({ nodeValue, nodeName, selections, data, props, hasKeep }) => {
 
     const getFiltered = _.cond([
       [Array.isArray, _.project(props)],
@@ -76,13 +76,19 @@ function Transform(options, customResolvers) {
     ]);
 
     const filtered = getFiltered(nodeValue || []);
+    let lastValue = null
     lastArrayFiltered = null;
+
     return selections.reduce((acc, sel) => {
-      const value = getQueryResolved(sel, lastArrayFiltered || filtered);
+      let value;
 
       if(options.keep || hasKeep) {
+        value = getQueryResolved(sel, lastValue || filtered);
         shouldKeep = true;
+        lastValue = value;
         return _.assoc(nodeName, value, acc);
+      } else {
+        value = getQueryResolved(sel, lastArrayFiltered || filtered);
       }
 
       const { nodeName: selName } = _.ast.getAllProps(sel);
@@ -94,6 +100,10 @@ function Transform(options, customResolvers) {
         _objToGet = { [selName]: valueFromNode };
       } else if(!sel.selectionSet && !_.isNil(valueFromNode)) {
         _objToGet[selName] = valueFromNode;
+      }
+
+      if(!_.equals(value, lastValue)) {
+        lastValue = null;
       }
 
       if(!_.equals(value, lastArrayFiltered)) {
@@ -128,7 +138,7 @@ function Transform(options, customResolvers) {
       return getItemsResolved({ nodeName, props, data: dataResolversApplied, ast })
     }
 
-    return getChildreansResolved({
+    return getChildrensResolved({
       data: dataResolversApplied,
       selections,
       nodeValue,
