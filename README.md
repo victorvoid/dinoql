@@ -10,7 +10,7 @@ A customizable GraphQL style query language for interacting with JavaScript obje
 
 You can support the project by checking out our sponsor page. It takes only one click:
 
-<a href="https://tracking.gitads.io/?repo=dinoql"><img src="https://images.gitads.io/dinoql" alt="GitAds"/></a>
+<a target="_blank" href="https://tracking.gitads.io/?repo=dinoql"><img src="https://images.gitads.io/dinoql" alt="GitAds"/></a>
 
 **Table of Contents**
 
