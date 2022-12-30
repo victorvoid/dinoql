@@ -2,15 +2,8 @@
 
 [![Build Status](https://travis-ci.org/victorvoid/dinoql.svg?branch=master)](https://travis-ci.org/victorvoid/dinoql)
 [![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
-[![Try dinoql on RunKit](https://badge.runkitcdn.com/dinoql.svg)](https://npm.runkit.com/dinoql)
 
 A customizable GraphQL style query language for interacting with JavaScript objects. Use dinoql to traverse JavaScript objects the same way you query APIs with GraphQL. 
-
-## Supporting the project
-
-You can support the project by checking out our sponsor page. It takes only one click:
-
-<a target="_blank" href="https://tracking.gitads.io/?repo=dinoql"><img src="https://images.gitads.io/dinoql" alt="GitAds"/></a>
 
 **Table of Contents**
 
